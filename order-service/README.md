@@ -9,3 +9,6 @@
 - Order should be validated in under 3 seconds
 - The system should be able to handle a few thousand users
 - User should be notified with order summary
+
+# Diagram
+![Service diagram](diagram.png)
