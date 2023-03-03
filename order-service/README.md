@@ -1,11 +1,11 @@
 # Requirements
 
 ## Functional
-- Product is stored in local storage for 1h
-- Prevent order if items sum is too large
+- Products are stored in local storage
+- Prevent order if final price is too large
 - Prefilled form for delivery data
 
 ## Non-functional
-- Order should be validated in under 5 seconds
+- Order should be validated in under 3 seconds
 - The system should be able to handle a few thousand users
 - User should be notified with order summary

@@ -3,7 +3,7 @@
 ## Functional
 - User authentication
 - Password reset
-- Use of Redis for caching/token storage
+- Feature to close an account 
 
 ## Non-functional
 - DB access time should be less than 3 seconds
