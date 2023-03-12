@@ -7,6 +7,7 @@ import (
 	"main/db"
 	"main/model"
 	"net/http"
+	"strings"
 )
 
 type BookController struct {
@@ -23,7 +24,7 @@ func (receiver BookController) CreateBook(ctx *gin.Context) {
 
 	err := receiver.Collection.Insert(book)
 	if err != nil {
-		if errors.Is(err, errors.New("book with isbn="+book.ISBN+" already exists")) {
+		if strings.Contains(err.Error(), "book with isbn="+book.ISBN+" already exists") {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 			return
 		}
@@ -45,7 +46,6 @@ func (receiver BookController) GetBookByISBN(ctx *gin.Context) {
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
 	ctx.JSON(http.StatusOK, book)
 }
 
@@ -67,8 +67,7 @@ func (receiver BookController) UpdateBook(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "document with isbn=" + book.ISBN + " not found"})
 		return
 	}
-
-	ctx.JSON(http.StatusOK, gin.H{"updated": updated})
+	ctx.Status(http.StatusNoContent)
 }
 
 func (receiver BookController) DeleteBookByISBN(ctx *gin.Context) {
@@ -82,6 +81,5 @@ func (receiver BookController) DeleteBookByISBN(ctx *gin.Context) {
 		ctx.JSON(http.StatusNotFound, gin.H{"error": "document with isbn=" + ctx.Param("isbn") + " not found"})
 		return
 	}
-
-	ctx.JSON(http.StatusOK, gin.H{"deleted": deleted})
+	ctx.Status(http.StatusNoContent)
 }
