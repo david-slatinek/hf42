@@ -2,11 +2,11 @@
 
 ## Functional
 - CRUD operations for book management
-- Add book review
+- Add feature to send book as a gift
 - Get random book
 
 ## Non-functional
-- 5 grade system review
+- DB access time should be less than 3 seconds
 - User should be notified about new books
 - For large amounts, add discount
 
