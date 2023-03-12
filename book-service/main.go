@@ -65,6 +65,7 @@ func main() {
 
 	router.POST("/book", bookController.CreateBook)
 	router.GET("/book/:isbn", bookController.GetBookByISBN)
+	router.PUT("/book", bookController.UpdateBook)
 
 	srv := &http.Server{
 		Addr:         ":8080",

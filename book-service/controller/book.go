@@ -19,6 +19,7 @@ func (receiver BookController) CreateBook(ctx *gin.Context) {
 		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
 		return
 	}
+	book.ID = ""
 
 	id, err := receiver.Collection.Insert(book)
 	if err != nil {
@@ -43,4 +44,26 @@ func (receiver BookController) GetBookByISBN(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, book)
+}
+
+func (receiver BookController) UpdateBook(ctx *gin.Context) {
+	var book model.Book
+	if err := ctx.ShouldBindJSON(&book); err != nil {
+		ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	book.ID = ""
+
+	updated, err := receiver.Collection.UpdateBook(book)
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if updated == 0 {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "document with isbn=" + book.ISBN + " not found"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"updated": updated})
 }

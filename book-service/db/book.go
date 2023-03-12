@@ -32,3 +32,11 @@ func (receiver BookCollection) GetBookByISBN(isbn string) (model.Book, error) {
 
 	return book, nil
 }
+
+func (receiver BookCollection) UpdateBook(book model.Book) (int, error) {
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
+	defer cancel()
+
+	res, err := receiver.Collection.ReplaceOne(ctx, bson.M{"isbn": book.ISBN}, book)
+	return int(res.ModifiedCount), err
+}
