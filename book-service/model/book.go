@@ -1,5 +1,7 @@
 package model
 
+import "reflect"
+
 type Book struct {
 	ID   string `json:"id" bson:"_id,omitempty"`
 	ISBN string `json:"isbn" bson:"isbn" binding:"required"`
@@ -23,4 +25,34 @@ type Book struct {
 	Publisher string  `json:"publisher" bson:"publisher" binding:"required"`
 	Language  string  `json:"language" bson:"language" binding:"required"`
 	Price     float32 `json:"price" bson:"price" binding:"required,min=0"`
+}
+
+func (receiver Book) Equal(book Book) bool {
+	if len(receiver.Categories) != len(book.Categories) {
+		return false
+	}
+
+	for i := range receiver.Categories {
+		if receiver.Categories[i] != book.Categories[i] {
+			return false
+		}
+	}
+
+	val := reflect.ValueOf(&receiver).Elem()
+	otherFields := reflect.Indirect(reflect.ValueOf(book))
+
+	for i := 0; i < val.NumField(); i++ {
+		typeField := val.Type().Field(i)
+		if typeField.Name == "ID" || typeField.Name == "Categories" {
+			continue
+		}
+
+		value := val.Field(i)
+		otherValue := otherFields.FieldByName(typeField.Name)
+
+		if value.Interface() != otherValue.Interface() {
+			return false
+		}
+	}
+	return true
 }

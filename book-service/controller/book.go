@@ -22,7 +22,7 @@ func (receiver BookController) CreateBook(ctx *gin.Context) {
 	}
 	book.ID = ""
 
-	err := receiver.Collection.Insert(book)
+	err := receiver.Collection.CreateBook(book)
 	if err != nil {
 		if strings.Contains(err.Error(), "book with isbn="+book.ISBN+" already exists") {
 			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})

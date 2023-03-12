@@ -12,11 +12,30 @@ import (
 	"main/model"
 	"net/http"
 	"net/http/httptest"
-	"net/url"
 	"os"
 	"testing"
 	"time"
 )
+
+var testBook = model.Book{
+	ISBN:             "test-isbn",
+	Title:            "test-title",
+	Subtitle:         "test-subtitle",
+	Author:           "test-author",
+	Year:             time.Now().Year(),
+	Description:      "test-description",
+	Categories:       []string{"test-category"},
+	OriginalTitle:    "test-original-title",
+	OriginalSubtitle: "test-original-subtitle",
+	OriginalYear:     time.Now().Year() - 1,
+	Translator:       "test-translator",
+	Size:             "test-size",
+	Weight:           "test-weight",
+	Pages:            420,
+	Publisher:        "test-publisher",
+	Language:         "test-language",
+	Price:            42,
+}
 
 func getClient() *mongo.Client {
 	_ = env.Load("../env/.env")
@@ -49,35 +68,13 @@ func TestBookController_CreateBook(t *testing.T) {
 	defer tearDown()
 	defer func(Collection db.BookCollection, isbn string) {
 		_, _ = Collection.DeleteBookByISBN(isbn)
-	}(bookController.Collection, "test-isbn")
+	}(bookController.Collection, testBook.ISBN)
 
-	book := model.Book{
-		ISBN:             "test-isbn",
-		Title:            "test-title",
-		Subtitle:         "test-subtitle",
-		Author:           "test-author",
-		Year:             time.Now().Year(),
-		Description:      "test-description",
-		Categories:       []string{"test-category"},
-		OriginalTitle:    "test-original-title",
-		OriginalSubtitle: "test-original-subtitle",
-		OriginalYear:     time.Now().Year() - 1,
-		Translator:       "test-translator",
-		Size:             "test-size",
-		Weight:           "test-weight",
-		Pages:            420,
-		Publisher:        "test-publisher",
-		Language:         "test-language",
-		Price:            42,
-	}
-
-	u := url.URL{Path: "/book"}
-
-	jsonReq, _ := json.Marshal(book)
-	req, _ := http.NewRequest(http.MethodPost, u.String(), bytes.NewBuffer(jsonReq))
+	jsonReq, _ := json.Marshal(testBook)
+	req, _ := http.NewRequest(http.MethodPost, "/book", bytes.NewBuffer(jsonReq))
 
 	router := gin.Default()
-	router.POST(u.String(), bookController.CreateBook)
+	router.POST("/book", bookController.CreateBook)
 
 	w := httptest.NewRecorder()
 	router.ServeHTTP(w, req)
@@ -91,6 +88,51 @@ func TestBookController_CreateBook(t *testing.T) {
 			t.FailNow()
 		}
 		t.Logf("Error description: %s", errDesc["error"])
+		t.FailNow()
+	}
+}
+
+func TestBookController_GetBookByISBN(t *testing.T) {
+	bookController, tearDown := getBookController()
+	defer tearDown()
+	defer func(Collection db.BookCollection, isbn string) {
+		_, _ = Collection.DeleteBookByISBN(isbn)
+	}(bookController.Collection, testBook.ISBN)
+
+	_ = bookController.Collection.CreateBook(testBook)
+
+	req, _ := http.NewRequest(http.MethodGet, "/book/"+testBook.ISBN, nil)
+
+	router := gin.Default()
+	router.GET("/book/:isbn", bookController.GetBookByISBN)
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Logf("Expected return code was %d, got %d", http.StatusOK, w.Code)
+
+		var errDesc map[string]string
+		if err := json.Unmarshal(w.Body.Bytes(), &errDesc); err != nil {
+			t.Logf("Error with unmarshal: %s", err)
+			t.FailNow()
+		}
+		t.Logf("Error description: %s", errDesc["error"])
+		t.FailNow()
+	}
+
+	var book model.Book
+	if err := json.Unmarshal(w.Body.Bytes(), &book); err != nil {
+		t.Logf("Error with unmarshal: %s", err)
+		t.FailNow()
+	}
+
+	if !testBook.Equal(book) {
+		t.Log("Objects are not the same")
+		t.Log("Expected:")
+		t.Logf("\n%v", testBook)
+		t.Log("Got:")
+		t.Logf("\n%v", book)
 		t.FailNow()
 	}
 }
