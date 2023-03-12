@@ -21,13 +21,16 @@ func (receiver BookController) CreateBook(ctx *gin.Context) {
 	}
 	book.ID = ""
 
-	id, err := receiver.Collection.Insert(book)
+	err := receiver.Collection.Insert(book)
 	if err != nil {
+		if errors.Is(err, errors.New("book with isbn="+book.ISBN+" already exists")) {
+			ctx.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+			return
+		}
 		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
-
-	ctx.JSON(http.StatusOK, gin.H{"id": id})
+	ctx.Status(http.StatusCreated)
 }
 
 func (receiver BookController) GetBookByISBN(ctx *gin.Context) {
@@ -66,4 +69,19 @@ func (receiver BookController) UpdateBook(ctx *gin.Context) {
 	}
 
 	ctx.JSON(http.StatusOK, gin.H{"updated": updated})
+}
+
+func (receiver BookController) DeleteBookByISBN(ctx *gin.Context) {
+	deleted, err := receiver.Collection.DeleteBookByISBN(ctx.Param("isbn"))
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	if deleted == 0 {
+		ctx.JSON(http.StatusNotFound, gin.H{"error": "document with isbn=" + ctx.Param("isbn") + " not found"})
+		return
+	}
+
+	ctx.JSON(http.StatusOK, gin.H{"deleted": deleted})
 }
