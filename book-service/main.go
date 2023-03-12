@@ -64,6 +64,7 @@ func main() {
 	router := gin.Default()
 
 	router.POST("/book", bookController.CreateBook)
+	router.GET("/book/:isbn", bookController.GetBookByISBN)
 
 	srv := &http.Server{
 		Addr:         ":8080",
