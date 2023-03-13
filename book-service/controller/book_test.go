@@ -87,7 +87,12 @@ func TestBookController_CreateBook(t *testing.T) {
 			t.Logf("Error with unmarshal: %s", err)
 			t.FailNow()
 		}
-		t.Logf("Error description: %s", errDesc["error"])
+
+		if val, ok := errDesc["error"]; ok {
+			t.Logf("Error description: %s", val)
+		} else {
+			t.Logf("Error description not found, response: %s", errDesc)
+		}
 		t.FailNow()
 	}
 }
@@ -117,7 +122,12 @@ func TestBookController_GetBookByISBN(t *testing.T) {
 			t.Logf("Error with unmarshal: %s", err)
 			t.FailNow()
 		}
-		t.Logf("Error description: %s", errDesc["error"])
+
+		if val, ok := errDesc["error"]; ok {
+			t.Logf("Error description: %s", val)
+		} else {
+			t.Logf("Error description not found, response: %s", errDesc)
+		}
 		t.FailNow()
 	}
 
