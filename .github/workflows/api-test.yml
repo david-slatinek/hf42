@@ -21,10 +21,11 @@ jobs:
         uses: actions/setup-go@v3
         with:
           go-version: 1.20
-      - run: go version
 
       - name: Install dependencies
-        run: go get -x .
+        run: | 
+          pwd
+          go get -x .
 
       - name: Create env
         env:
