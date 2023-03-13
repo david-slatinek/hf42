@@ -186,3 +186,38 @@ func TestBookController_UpdateBook(t *testing.T) {
 		t.FailNow()
 	}
 }
+
+func TestBookController_DeleteBookByISBN(t *testing.T) {
+	bookController, tearDown := getBookController()
+	defer tearDown()
+	defer func(Collection db.BookCollection, isbn string) {
+		_, _ = Collection.DeleteBookByISBN(isbn)
+	}(bookController.Collection, testBook.ISBN)
+
+	_ = bookController.Collection.CreateBook(testBook)
+
+	req, _ := http.NewRequest(http.MethodDelete, "/book/"+testBook.ISBN, nil)
+
+	router := gin.Default()
+	router.DELETE("/book/:isbn", bookController.DeleteBookByISBN)
+
+	w := httptest.NewRecorder()
+	router.ServeHTTP(w, req)
+
+	if w.Code != http.StatusNoContent {
+		t.Logf("Expected return code was %d, got %d", http.StatusNoContent, w.Code)
+
+		var errDesc map[string]string
+		if err := json.Unmarshal(w.Body.Bytes(), &errDesc); err != nil {
+			t.Logf("Error with unmarshal: %s", err)
+			t.FailNow()
+		}
+
+		if val, ok := errDesc["error"]; ok {
+			t.Logf("Error description: %s", val)
+		} else {
+			t.Logf("Error description not found, response: %s", errDesc)
+		}
+		t.FailNow()
+	}
+}
