@@ -23,6 +23,11 @@ jobs:
         with:
           go-version: 1.20
 
+      - name: Install dependencies
+        run: |
+          go mod init main
+          go mod tidy
+
       - name: Create env
         env:
           MONGO_URL: ${{ secrets.MONGO_URL }}
@@ -30,8 +35,9 @@ jobs:
           echo MONGO_URL="$MONGO_URL" > env/.env
 
       - name: Build
-        run: go build -v ./...
+        run: go build -v main.go
 
       - name: Test
-        run: | 
-          GIN_MODE=release go test -v ./...
+        run: |
+          cd controller
+          GIN_MODE=release go test -v book_test.go
