@@ -28,8 +28,9 @@ jobs:
 
       - name: Build
         run: |
-          go build -v ./...
-
+          cd book-service
+          go build -v main.go
       - name: Test
         run: |
-          GIN_MODE=release go test -v ./...
+          cd book-service
+          GIN_MODE=release go test -v book_test.go
