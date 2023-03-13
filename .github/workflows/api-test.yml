@@ -1,4 +1,4 @@
-name: Perform API unit tests
+name: API unit tests
 
 on:
   push:
@@ -13,6 +13,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
+
+      - name: Move to project directory
+        run: cd book-service
 
       - name: Set up Go
         uses: actions/setup-go@v3
