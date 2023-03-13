@@ -58,13 +58,13 @@ const docTemplate = `{
                         "description": "No content"
                     },
                     "400": {
-                        "description": "error: bad request",
+                        "description": "Bad request",
                         "schema": {
                             "$ref": "#/definitions/model.Error"
                         }
                     },
                     "500": {
-                        "description": "error: internal server error",
+                        "description": "Internal server error",
                         "schema": {
                             "$ref": "#/definitions/model.Error"
                         }
@@ -106,14 +106,15 @@ const docTemplate = `{
                         "minLength": 1
                     },
                     "example": [
-                        "[\"Science Fiction\"",
-                        " \"Fantasy\"]"
+                        "'Science Fiction'",
+                        " 'Fantasy'"
                     ]
                 },
                 "description": {
                     "description": "Description is a short description of the book",
                     "type": "string",
-                    "minLength": 1
+                    "minLength": 1,
+                    "example": "Go on a galactic adventure with the last human on Earth, his alien best friend, and a depressed android."
                 },
                 "isbn": {
                     "description": "ISBN is the unique identifier of the book",
@@ -207,7 +208,8 @@ const docTemplate = `{
             "type": "object",
             "properties": {
                 "error": {
-                    "type": "string"
+                    "type": "string",
+                    "example": "bad request"
                 }
             }
         }

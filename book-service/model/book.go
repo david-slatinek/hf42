@@ -3,6 +3,7 @@ package model
 import "reflect"
 
 // Book is a model for book
+//
 //	@Description	Book model
 type Book struct {
 	// ISBN is the unique identifier of the book
@@ -17,13 +18,9 @@ type Book struct {
 	// Year is the year of publication
 	Year int `json:"year" bson:"year" binding:"required,min=0" example:"1979" validate:"required" min:"0"`
 	// Description is a short description of the book
-	Description string `json:"description" bson:"description" binding:"required" example:"It's an ordinary Thursday 
-		lunchtime for Arthur Dent until his house gets demolished. The Earth follows shortly afterwards to make way 
-		for a new hyperspace express route, and his best friend has just announced that he's an alien. At this moment, 
-		they're hurtling through space with nothing but their towels and an innocuous-looking book inscribed, in large 
-		friendly letters, with the words: DON'T PANIC." validate:"required" minLength:"1"`
+	Description string `json:"description" bson:"description" binding:"required" example:"Go on a galactic adventure with the last human on Earth, his alien best friend, and a depressed android." validate:"required" minLength:"1"`
 	// Categories is a list of categories
-	Categories []string `json:"categories" bson:"categories" example:"[\"Science Fiction\", \"Fantasy\"]" validate:"required" minLength:"1"`
+	Categories []string `json:"categories" bson:"categories" example:"'Science Fiction', 'Fantasy'" validate:"required" minLength:"1"`
 
 	// OriginalTitle is the title of the original book
 	OriginalTitle string `json:"original_title" bson:"original_title,omitempty" example:"The Hitchhiker's Guide to the Galaxy" validate:"optional" minLength:"1"`

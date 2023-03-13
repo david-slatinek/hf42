@@ -12,14 +12,16 @@ definitions:
       categories:
         description: Categories is a list of categories
         example:
-        - '["Science Fiction"'
-        - ' "Fantasy"]'
+        - '''Science Fiction'''
+        - ' ''Fantasy'''
         items:
           minLength: 1
           type: string
         type: array
       description:
         description: Description is a short description of the book
+        example: Go on a galactic adventure with the last human on Earth, his alien
+          best friend, and a depressed android.
         minLength: 1
         type: string
       isbn:
@@ -111,6 +113,7 @@ definitions:
     description: Error model
     properties:
       error:
+        example: bad request
         type: string
     type: object
 host: localhost:8080
@@ -144,11 +147,11 @@ paths:
         "201":
           description: No content
         "400":
-          description: 'error: bad request'
+          description: Bad request
           schema:
             $ref: '#/definitions/model.Error'
         "500":
-          description: 'error: internal server error'
+          description: Internal server error
           schema:
             $ref: '#/definitions/model.Error'
       summary: Create new book

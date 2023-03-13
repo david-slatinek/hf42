@@ -23,8 +23,8 @@ type BookController struct {
 //	@Produce		json
 //	@Param			requestBody	body	model.Book	true	"Book object"
 //	@Success		201			"No content"
-//	@Failure		400			{object}	model.Error	"error: bad request"
-//	@Failure		500			{object}	model.Error	"error: internal server error"
+//	@Failure		400			{object}	model.Error	"Bad request"
+//	@Failure		500			{object}	model.Error	"Internal server error"
 //	@Router			/book [post]
 func (receiver BookController) CreateBook(ctx *gin.Context) {
 	var book model.Book
