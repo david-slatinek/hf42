@@ -11,22 +11,13 @@ jobs:
   build:
 
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./book-service
-
     steps:
       - uses: actions/checkout@v3
 
       - name: Set up Go
-        uses: actions/setup-go@v3.5.0
+        uses: actions/setup-go@v3
         with:
           go-version: 1.20
-
-      - name: Install dependencies
-        run: |
-          go mod init main
-          go mod tidy
 
       - name: Create env
         env:
@@ -35,9 +26,11 @@ jobs:
           echo MONGO_URL="$MONGO_URL" > env/.env
 
       - name: Build
-        run: go build -v main.go
+        run: |
+          cd book-service
+          go build -v main.go
 
       - name: Test
         run: |
-          cd controller
+          cd book-service/controller
           GIN_MODE=release go test -v book_test.go
