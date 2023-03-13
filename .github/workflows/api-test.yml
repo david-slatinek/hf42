@@ -23,6 +23,7 @@ jobs:
         env:
           MONGO_URL: ${{ secrets.MONGO_URL }}
         run: |
+          cd book-service
           echo MONGO_URL="$MONGO_URL" > env/.env
 
       - name: Build
