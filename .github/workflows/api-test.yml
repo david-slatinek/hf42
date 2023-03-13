@@ -40,4 +40,4 @@ jobs:
       - name: Test
         run: |
           cd controller
-          GIN_MODE=release go test -v book_test.go
+          GIN_MODE=release go test -v ./...
