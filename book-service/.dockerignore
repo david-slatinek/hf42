@@ -1,0 +1,5 @@
+.gitignore
+README.md
+diagram.drawio
+diagram.png
+*_test.go
