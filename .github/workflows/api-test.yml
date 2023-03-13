@@ -9,7 +9,6 @@ permissions:
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
     defaults:
       run:
@@ -41,5 +40,4 @@ jobs:
 
       - name: Test
         run: |
-          cd controller
           GIN_MODE=release go test -v ./...
