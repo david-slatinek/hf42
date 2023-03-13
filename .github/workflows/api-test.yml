@@ -30,9 +30,8 @@ jobs:
           echo MONGO_URL="$MONGO_URL" > env/.env
 
       - name: Build
-        run: go build -v main.go
+        run: go build -v ./...
 
       - name: Test
         run: | 
-          cd controller
-          GIN_MODE=release go test -v .
+          GIN_MODE=release go test -v ./...
