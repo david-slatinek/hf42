@@ -16,6 +16,6 @@ COPY --from=build /api/main ./
 RUN mkdir env
 COPY --from=build /api/env/.env ./env
 
-#ENV GIN_MODE=release
+ENV GIN_MODE=release
 
 CMD ["./main"]
