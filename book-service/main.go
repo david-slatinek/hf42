@@ -4,12 +4,15 @@ import (
 	"context"
 	"errors"
 	"github.com/gin-gonic/gin"
+	swaggerFiles "github.com/swaggo/files"
+	ginSwagger "github.com/swaggo/gin-swagger"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
 	"log"
 	"main/controller"
 	"main/db"
+	_ "main/docs"
 	"main/env"
 	"net/http"
 	"os"
@@ -18,6 +21,25 @@ import (
 	"time"
 )
 
+//	@title			Book management API
+//	@version		1.0
+//	@description	Book management API for hf42 project
+//	@termsOfService	http://swagger.io/terms/
+
+//	@contact.name	David Slatinek
+//	@contact.url	https://github.com/david-slatinek
+
+//	@accept		json
+//	@produce	json
+//	@schemes	http
+
+//	@license.name	GNU General Public License v3.0
+//	@license.url	https://www.gnu.org/licenses/gpl-3.0.html
+
+//	@externalDocs.description	OpenAPI
+//	@externalDocs.url			https://swagger.io/resources/open-api/
+
+//	@host	localhost:8080
 func main() {
 	err := env.Load("env/.env")
 	if err != nil {
@@ -67,6 +89,8 @@ func main() {
 	router.GET("/book/:isbn", bookController.GetBookByISBN)
 	router.PUT("/book", bookController.UpdateBook)
 	router.DELETE("/book/:isbn", bookController.DeleteBookByISBN)
+
+	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	srv := &http.Server{
 		Addr:         ":8080",

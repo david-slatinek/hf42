@@ -1,0 +1,161 @@
+consumes:
+- application/json
+definitions:
+  model.Book:
+    description: Book model
+    properties:
+      author:
+        description: Author is the author of the book
+        example: Douglas Adams
+        minLength: 1
+        type: string
+      categories:
+        description: Categories is a list of categories
+        example:
+        - '["Science Fiction"'
+        - ' "Fantasy"]'
+        items:
+          minLength: 1
+          type: string
+        type: array
+      description:
+        description: Description is a short description of the book
+        minLength: 1
+        type: string
+      isbn:
+        description: ISBN is the unique identifier of the book
+        example: 978-3-16-148410-0
+        maxLength: 17
+        minLength: 17
+        type: string
+      language:
+        description: Language is the language of the book
+        example: English
+        minLength: 1
+        type: string
+      original_subtitle:
+        description: OriginalSubtitle is the subtitle of the original book
+        example: A Trilogy in Five Parts
+        minLength: 1
+        type: string
+      original_title:
+        description: OriginalTitle is the title of the original book
+        example: The Hitchhiker's Guide to the Galaxy
+        minLength: 1
+        type: string
+      original_year:
+        description: OriginalAuthor is the author of the original book
+        example: 1979
+        minimum: 0
+        type: integer
+      pages:
+        description: Pages is the number of pages in the book
+        example: 215
+        minimum: 1
+        type: integer
+      price:
+        description: Price is the price of the book
+        example: 21.99
+        minimum: 0
+        type: number
+      publisher:
+        description: Publisher is the publisher of the book
+        example: Pan Books Ltd
+        minLength: 1
+        type: string
+      size:
+        description: Size is the size of the book
+        example: 21 x 14 cm
+        minLength: 1
+        type: string
+      subtitle:
+        description: Subtitle is the subtitle of the book
+        example: A Trilogy in Five Parts
+        minLength: 1
+        type: string
+      title:
+        description: Title is the title of the book
+        example: The Hitchhiker's Guide to the Galaxy
+        minLength: 1
+        type: string
+      translator:
+        description: OriginalDescription is a short description of the original book
+        example: John Stone
+        minLength: 1
+        type: string
+      weight:
+        description: Weight is the weight of the book
+        example: 0.3 kg
+        minLength: 1
+        type: string
+      year:
+        description: Year is the year of publication
+        example: 1979
+        minimum: 0
+        type: integer
+    required:
+    - author
+    - categories
+    - description
+    - isbn
+    - language
+    - pages
+    - price
+    - publisher
+    - size
+    - title
+    - weight
+    - year
+    type: object
+  model.Error:
+    description: Error model
+    properties:
+      error:
+        type: string
+    type: object
+host: localhost:8080
+info:
+  contact:
+    name: David Slatinek
+    url: https://github.com/david-slatinek
+  description: Book management API for hf42 project
+  license:
+    name: GNU General Public License v3.0
+    url: https://www.gnu.org/licenses/gpl-3.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Book management API
+  version: "1.0"
+paths:
+  /book:
+    post:
+      consumes:
+      - application/json
+      description: Create new book
+      parameters:
+      - description: Book object
+        in: body
+        name: requestBody
+        required: true
+        schema:
+          $ref: '#/definitions/model.Book'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: No content
+        "400":
+          description: 'error: bad request'
+          schema:
+            $ref: '#/definitions/model.Error'
+        "500":
+          description: 'error: internal server error'
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Create new book
+      tags:
+      - books
+produces:
+- application/json
+schemes:
+- http
+swagger: "2.0"
