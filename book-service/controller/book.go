@@ -45,6 +45,17 @@ func (receiver BookController) CreateBook(ctx *gin.Context) {
 	ctx.Status(http.StatusCreated)
 }
 
+// GetBookByISBN godoc
+//
+//	@Summary		Get book by ISBN
+//	@Description	Get book by ISBN
+//	@Tags			books
+//	@Param			isbn	path	string	true	"Book ISBN"
+//	@Produce		json
+//	@Success		200	{object}	model.Book	"Book object"
+//	@Failure		404	{object}	model.Error	"Book not found"
+//	@Failure		500	{object}	model.Error	"Internal server error"
+//	@Router			/book/{isbn} [get]
 func (receiver BookController) GetBookByISBN(ctx *gin.Context) {
 	book, err := receiver.Collection.GetBookByISBN(ctx.Param("isbn"))
 
@@ -60,6 +71,19 @@ func (receiver BookController) GetBookByISBN(ctx *gin.Context) {
 	ctx.JSON(http.StatusOK, book)
 }
 
+// UpdateBook godoc
+//
+//	@Summary		Update book
+//	@Description	Update book
+//	@Tags			books
+//	@Accept			json
+//	@Produce		json
+//	@Param			book	body	model.Book	true	"Book object"
+//	@Success		204		"No content"
+//	@Failure		400		{object}	model.Error	"Bad request"
+//	@Failure		404		{object}	model.Error	"Book not found"
+//	@Failure		500		{object}	model.Error	"Internal server error"
+//	@Router			/book [put]
 func (receiver BookController) UpdateBook(ctx *gin.Context) {
 	var book model.Book
 	if err := ctx.ShouldBindJSON(&book); err != nil {
@@ -80,6 +104,16 @@ func (receiver BookController) UpdateBook(ctx *gin.Context) {
 	ctx.Status(http.StatusNoContent)
 }
 
+// DeleteBookByISBN godoc
+//
+//	@Summary		Delete book by ISBN
+//	@Description	Delete book by ISBN
+//	@Tags			books
+//	@Param			isbn	path	string	true	"Book ISBN"
+//	@Success		204		"No content"
+//	@Failure		404		{object}	model.Error	"Book not found"
+//	@Failure		500		{object}	model.Error	"Internal server error"
+//	@Router			/book/{isbn} [delete]
 func (receiver BookController) DeleteBookByISBN(ctx *gin.Context) {
 	deleted, err := receiver.Collection.DeleteBookByISBN(ctx.Param("isbn"))
 	if err != nil {

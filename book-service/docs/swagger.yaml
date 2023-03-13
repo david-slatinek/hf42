@@ -157,6 +157,86 @@ paths:
       summary: Create new book
       tags:
       - books
+    put:
+      consumes:
+      - application/json
+      description: Update book
+      parameters:
+      - description: Book object
+        in: body
+        name: book
+        required: true
+        schema:
+          $ref: '#/definitions/model.Book'
+      produces:
+      - application/json
+      responses:
+        "204":
+          description: No content
+        "400":
+          description: Bad request
+          schema:
+            $ref: '#/definitions/model.Error'
+        "404":
+          description: Book not found
+          schema:
+            $ref: '#/definitions/model.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Update book
+      tags:
+      - books
+  /book/{isbn}:
+    delete:
+      description: Delete book by ISBN
+      parameters:
+      - description: Book ISBN
+        in: path
+        name: isbn
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No content
+        "404":
+          description: Book not found
+          schema:
+            $ref: '#/definitions/model.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Delete book by ISBN
+      tags:
+      - books
+    get:
+      description: Get book by ISBN
+      parameters:
+      - description: Book ISBN
+        in: path
+        name: isbn
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Book object
+          schema:
+            $ref: '#/definitions/model.Book'
+        "404":
+          description: Book not found
+          schema:
+            $ref: '#/definitions/model.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Get book by ISBN
+      tags:
+      - books
 produces:
 - application/json
 schemes:
