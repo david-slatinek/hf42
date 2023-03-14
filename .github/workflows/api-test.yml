@@ -20,8 +20,7 @@ jobs:
       - name: Create env
         env:
           MONGO_URL: ${{ secrets.MONGO_URL }}
-        run: |
-          echo MONGO_URL="$MONGO_URL" > env/.env
+        run: echo MONGO_URL="$MONGO_URL" > env/.env
 
       - name: Set up Go
         uses: actions/setup-go@v3
@@ -31,13 +30,10 @@ jobs:
           cache-dependency-path: book-service/go.sum
 
       - name: Install dependencies
-        run: |
-          go mod download -x
+        run: go mod download -x
 
       - name: Build
-        run: |
-          go build -v main.go
+        run: go build -v main.go
 
       - name: Test
-        run: |
-          GIN_MODE=release go test -v ./...
+        run: GIN_MODE=release go test -v ./...
