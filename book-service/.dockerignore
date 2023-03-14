@@ -1,5 +1,6 @@
+*_test.go
+env/.env-example
 .gitignore
-README.md
 diagram.drawio
 diagram.png
-*_test.go
+README.md
