@@ -3,6 +3,9 @@ name: API unit tests
 on:
   push:
     branches: [main]
+  path:
+    - book-service/**
+    - .github/workflows/api-test.yml
 
 permissions:
   contents: read
