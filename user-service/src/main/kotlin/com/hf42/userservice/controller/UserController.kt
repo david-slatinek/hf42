@@ -1,4 +1,4 @@
-package com.hf42.userservice
+package com.hf42.userservice.controller
 
 import org.springframework.web.bind.annotation.RequestMapping
 import org.springframework.web.bind.annotation.RestController
