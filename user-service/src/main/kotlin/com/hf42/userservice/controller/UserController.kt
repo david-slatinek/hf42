@@ -14,9 +14,9 @@ import org.springframework.web.bind.annotation.RestController
 
 @RestController
 @RequestMapping("/user")
-class UserController(private val userRepository:UserRepository) {
+class UserController(private val userRepository: UserRepository) {
     @PostMapping("/register")
-    fun register(@Valid @RequestBody user: User): ResponseEntity<Map<String,String>> {
+    fun register(@Valid @RequestBody user: User): ResponseEntity<Map<String, String>> {
         user.password = BCrypt.hashpw(user.password, BCrypt.gensalt(15));
         val obj = userRepository.save(user)
         return ResponseEntity(mapOf("id" to obj.id.toString()), HttpStatus.CREATED);

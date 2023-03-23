@@ -8,5 +8,5 @@ import org.springframework.context.annotation.PropertySource
 class UserServiceApplication
 
 fun main(args: Array<String>) {
-	runApplication<UserServiceApplication>(*args)
+    runApplication<UserServiceApplication>(*args)
 }
