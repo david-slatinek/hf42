@@ -100,6 +100,34 @@ class UserControllerTest {
 
     @Test
     fun delete() {
+        val body: MutableMap<String, Any> = HashMap()
+        body["firstName"] = "test"
+        body["lastName"] = "test"
+        body["email"] = "test@email.com"
+        body["password"] = "test_test_test"
+        body["streetAddress"] = "test"
+        body["city"] = "test"
+        body["postOfficeNumber"] = 1000
 
+        val registerResult = mockMvc.perform(
+            post("/register")
+                .contentType(APPLICATION_JSON)
+                .content(ObjectMapper().writeValueAsString(body))
+                .accept(APPLICATION_JSON)
+        ).andDo(MockMvcResultHandlers.print()).andReturn()
+
+        val registerResponse =
+            ObjectMapper().readValue(
+                registerResult.response.contentAsByteArray,
+                mutableMapOf<String, Any>()::class.java
+            )
+
+        mockMvc.perform(
+            delete("/" + registerResponse["id"])
+                .contentType(APPLICATION_JSON)
+                .accept(APPLICATION_JSON)
+        ).andDo(MockMvcResultHandlers.print()).andExpect(status().isOk)
+
+        mockMvc.perform(delete("/" + registerResponse["id"]).contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
     }
 }
