@@ -11,7 +11,12 @@ import org.springframework.web.bind.annotation.*
 
 
 @RestController
-@RequestMapping("/")
+@RequestMapping(
+    "/",
+    consumes = ["application/json"],
+    produces = ["application/json"],
+    headers = ["Content-Type=application/json"]
+)
 class UserController(private val userRepository: UserRepository) {
     @PostMapping("/register")
     fun register(@Valid @RequestBody user: User): ResponseEntity<Map<String, String>> {
