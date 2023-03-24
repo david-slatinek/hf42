@@ -7,15 +7,15 @@ on:
       - book-service/**
       - .github/workflows/book-test.yml
 
-permissions:
-  contents: read
-
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./book-service
+
+    permissions:
+      contents: read
 
     steps:
       - uses: actions/checkout@v3
