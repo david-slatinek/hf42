@@ -32,29 +32,74 @@ class UserControllerTest {
         body["city"] = "test"
         body["postOfficeNumber"] = 1000
 
-        val userAsJson: String = ObjectMapper().writeValueAsString(body)
-
-        val result = mockMvc.perform(
+        val registerResult = mockMvc.perform(
             post("/register")
                 .contentType(APPLICATION_JSON)
-                .content(userAsJson)
+                .content(ObjectMapper().writeValueAsString(body))
                 .accept(APPLICATION_JSON)
         ).andDo(MockMvcResultHandlers.print())
             .andExpect(status().isCreated).andReturn()
 
-        val parsedResponse =
-            ObjectMapper().readValue(result.response.contentAsByteArray, mutableMapOf<String, Any>()::class.java)
+        val registerResponse =
+            ObjectMapper().readValue(
+                registerResult.response.contentAsByteArray,
+                mutableMapOf<String, Any>()::class.java
+            )
 
-        mockMvc.perform(delete("/" + parsedResponse["id"]).contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
+        assertTrue(registerResponse.containsKey("id"))
+        assertEquals(24, registerResponse["id"].toString().length)
+
+        mockMvc.perform(delete("/" + registerResponse["id"]).contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
             .andDo(MockMvcResultHandlers.print())
-
     }
 
     @Test
     fun login() {
+        val body: MutableMap<String, Any> = HashMap()
+        body["firstName"] = "test"
+        body["lastName"] = "test"
+        body["email"] = "test@email.com"
+        body["password"] = "test_test_test"
+        body["streetAddress"] = "test"
+        body["city"] = "test"
+        body["postOfficeNumber"] = 1000
+
+        val registerResult = mockMvc.perform(
+            post("/register")
+                .contentType(APPLICATION_JSON)
+                .content(ObjectMapper().writeValueAsString(body))
+                .accept(APPLICATION_JSON)
+        ).andDo(MockMvcResultHandlers.print()).andReturn()
+
+        val registerResponse =
+            ObjectMapper().readValue(
+                registerResult.response.contentAsByteArray,
+                mutableMapOf<String, Any>()::class.java
+            )
+
+        val loginBody: MutableMap<String, Any> = HashMap()
+        loginBody["email"] = body["email"] as Any
+        loginBody["password"] = body["password"] as Any
+
+        val loginResult = mockMvc.perform(
+            post("/login")
+                .contentType(APPLICATION_JSON)
+                .content(ObjectMapper().writeValueAsString(loginBody))
+                .accept(APPLICATION_JSON)
+        ).andDo(MockMvcResultHandlers.print())
+            .andExpect(status().isOk).andReturn()
+
+        val loginResponse =
+            ObjectMapper().readValue(loginResult.response.contentAsByteArray, mutableMapOf<String, Any>()::class.java)
+
+        assertTrue(loginResponse.containsKey("message"))
+        assertEquals("login successful", loginResponse["message"])
+
+        mockMvc.perform(delete("/" + registerResponse["id"]).contentType(APPLICATION_JSON).accept(APPLICATION_JSON))
     }
 
     @Test
     fun delete() {
+
     }
 }
