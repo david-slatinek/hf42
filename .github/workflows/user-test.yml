@@ -1,4 +1,4 @@
-name: API unit tests
+name: User service API unit tests
 
 on:
   push:
