@@ -7,11 +7,7 @@ import jakarta.validation.Valid
 import org.mindrot.jbcrypt.BCrypt
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
-import org.springframework.web.bind.annotation.GetMapping
-import org.springframework.web.bind.annotation.PostMapping
-import org.springframework.web.bind.annotation.RequestBody
-import org.springframework.web.bind.annotation.RequestMapping
-import org.springframework.web.bind.annotation.RestController
+import org.springframework.web.bind.annotation.*
 
 
 @RestController
@@ -38,5 +34,11 @@ class UserController(private val userRepository: UserRepository) {
         }
 
         return ResponseEntity(mapOf("message" to "login successful"), HttpStatus.OK);
+    }
+
+    @DeleteMapping("/{userId}")
+    fun delete(@PathVariable userId: String): ResponseEntity<Map<String, String>> {
+        userRepository.deleteById(userId)
+        return ResponseEntity(mapOf("message" to "user deleted"), HttpStatus.OK);
     }
 }
