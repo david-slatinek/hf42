@@ -6,6 +6,7 @@ on:
     paths:
       - book-service/**
       - .github/workflows/book-test.yml
+  workflow_dispatch:
 
 jobs:
   test:
