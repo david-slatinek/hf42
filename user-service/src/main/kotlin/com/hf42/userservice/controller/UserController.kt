@@ -13,12 +13,17 @@ import org.springframework.web.bind.annotation.RestController
 
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/")
 class UserController(private val userRepository: UserRepository) {
     @PostMapping("/register")
     fun register(@Valid @RequestBody user: User): ResponseEntity<Map<String, String>> {
+        if (userRepository.findByEmail(user.email) != null) {
+            return ResponseEntity(mapOf("error" to "User already exists"), HttpStatus.BAD_REQUEST);
+        }
+
         user.password = BCrypt.hashpw(user.password, BCrypt.gensalt(15));
         val obj = userRepository.save(user)
         return ResponseEntity(mapOf("id" to obj.id.toString()), HttpStatus.CREATED);
     }
+
 }

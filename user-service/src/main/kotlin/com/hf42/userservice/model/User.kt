@@ -22,8 +22,7 @@ data class User(
 
     @field:NotBlank(message = "Email is mandatory")
     @field:Email(message = "Email should be valid")
-    @field:Size(min = 2, max = 30, message = "Email should be between 2 and 20 characters")
-    private val email: String,
+    @field:Size(min = 2, max = 30, message = "Email should be between 2 and 20 characters") val email: String,
 
     @field:NotBlank(message = "Password is mandatory")
     @field:Size(min = 8, message = "Password should be greater than 8 characters")
