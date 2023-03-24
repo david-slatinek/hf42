@@ -22,6 +22,8 @@ dependencies {
     implementation("org.jetbrains.kotlin:kotlin-reflect")
     implementation("org.springframework.boot:spring-boot-starter-validation:3.0.4")
     implementation("org.mindrot:jbcrypt:0.4")
+    implementation("org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4")
+    implementation("org.springdoc:springdoc-openapi-kotlin:1.6.15")
     testImplementation("org.springframework.boot:spring-boot-starter-test")
 }
 
