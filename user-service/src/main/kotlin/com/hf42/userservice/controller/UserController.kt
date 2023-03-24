@@ -1,11 +1,13 @@
 package com.hf42.userservice.controller
 
+import com.hf42.userservice.model.Login
 import com.hf42.userservice.model.User
 import com.hf42.userservice.repository.UserRepository
 import jakarta.validation.Valid
 import org.mindrot.jbcrypt.BCrypt
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.web.bind.annotation.GetMapping
 import org.springframework.web.bind.annotation.PostMapping
 import org.springframework.web.bind.annotation.RequestBody
 import org.springframework.web.bind.annotation.RequestMapping
@@ -26,4 +28,15 @@ class UserController(private val userRepository: UserRepository) {
         return ResponseEntity(mapOf("id" to obj.id.toString()), HttpStatus.CREATED);
     }
 
+    @PostMapping("/login")
+    fun login(@Valid @RequestBody login: Login): ResponseEntity<Map<String, String>> {
+        val user = userRepository.findByEmail(login.email)
+            ?: return ResponseEntity(mapOf("error" to "invalid email or password"), HttpStatus.BAD_REQUEST)
+
+        if (!BCrypt.checkpw(login.password, user.password)) {
+            return ResponseEntity(mapOf("error" to "invalid email or password"), HttpStatus.BAD_REQUEST)
+        }
+
+        return ResponseEntity(mapOf("message" to "login successful"), HttpStatus.OK);
+    }
 }
