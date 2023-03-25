@@ -1,0 +1,10 @@
+version: "3.9"
+
+services:
+  api:
+    build: .
+    ports:
+      - "9000:9000"
+    container_name: user-service-api
+    hostname: user-service
+    restart: on-failure
