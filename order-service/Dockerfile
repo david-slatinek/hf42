@@ -1,8 +1,5 @@
 FROM openjdk:19-alpine
 
-WORKDIR /app
+COPY . .
 
-COPY .env /app/.env
-COPY /build/libs/*.jar /app/app.jar
-
-CMD ["java", "-jar", "app.jar"]
+CMD ["./gradlew", "--console=plain", "quarkusDev"]

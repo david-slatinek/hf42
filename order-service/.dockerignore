@@ -1,0 +1,10 @@
+.gradle
+.idea
+build
+order
+.gitignore
+diagram.drawio
+diagram.png
+env.example
+gradlew.bat
+README.md
