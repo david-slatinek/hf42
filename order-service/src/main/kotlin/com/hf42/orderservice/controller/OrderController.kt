@@ -31,7 +31,7 @@ class OrderController {
         order.orderID = UUID.randomUUID().toString()
 
         if (orderService.insertOrder(order)) {
-            return Response.status(Response.Status.CREATED).entity(mapOf("id" to order.orderID)).build()
+            return Response.status(Response.Status.CREATED).entity(mapOf("orderID" to order.orderID)).build()
         }
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(mapOf("error" to "Order was not created"))
             .build()
