@@ -10,7 +10,7 @@ import javax.ws.rs.Produces
 import javax.ws.rs.core.MediaType
 import javax.ws.rs.core.Response
 
-@Path("/api")
+@Path("/")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 class OrderController {
@@ -20,7 +20,22 @@ class OrderController {
     @POST
     @Path("/order")
     fun add(order: Order): Response {
-        val id = orderService.getCollection()?.insertOne(order)
-        return Response.status(Response.Status.CREATED).build()
+        if (order.totalPrice != order.books.sumOf { it.totalPrice }) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity(mapOf("error" to "Order price doesn't match sum of books prices")).build()
+        }
+
+        if (!order.books.all { it.price * it.quantity == it.totalPrice }) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity(mapOf("error" to "Books price times quantity doesn't match it's total price")).build()
+        }
+
+        val id = orderService.insertOrder(order)
+        return if (id == null) {
+            Response.status(Response.Status.INTERNAL_SERVER_ERROR)
+                .entity(mapOf("error" to "Order was not created")).build()
+        } else {
+            Response.status(Response.Status.CREATED).entity(mapOf("id" to id)).build()
+        }
     }
 }
