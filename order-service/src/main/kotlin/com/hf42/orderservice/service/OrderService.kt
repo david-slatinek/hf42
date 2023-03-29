@@ -32,4 +32,8 @@ class OrderService {
     fun updateOrder(order: Order): Boolean {
         return getCollection().replaceOne(eq("orderID", order.orderID), order).matchedCount == 1L
     }
+
+    fun deleteOrder(id: String): Boolean {
+        return getCollection().deleteOne(eq("orderID", id)).deletedCount == 1L
+    }
 }

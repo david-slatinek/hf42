@@ -86,4 +86,18 @@ class OrderController {
         }
         return Response.status(Response.Status.NOT_FOUND).entity(mapOf("error" to "Order not found")).build()
     }
+
+    @DELETE
+    @Path("/order/{id}")
+    fun delete(@PathParam("id") id: String): Response {
+        if (id.length != 36) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity(mapOf("error" to "Order ID must be 36 characters")).build()
+        }
+
+        if (orderService.deleteOrder(id)) {
+            return Response.status(Response.Status.NO_CONTENT).build()
+        }
+        return Response.status(Response.Status.NOT_FOUND).entity(mapOf("error" to "Order not found")).build()
+    }
 }
