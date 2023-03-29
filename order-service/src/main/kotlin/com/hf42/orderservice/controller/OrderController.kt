@@ -30,13 +30,11 @@ class OrderController {
 
         order.orderID = UUID.randomUUID().toString()
 
-        val id = orderService.insertOrder(order)
-        return if (id == null) {
-            Response.status(Response.Status.INTERNAL_SERVER_ERROR)
-                .entity(mapOf("error" to "Order was not created")).build()
-        } else {
-            Response.status(Response.Status.CREATED).entity(mapOf("id" to id)).build()
+        if (orderService.insertOrder(order)) {
+            return Response.status(Response.Status.CREATED).entity(mapOf("id" to order.orderID)).build()
         }
+        return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(mapOf("error" to "Order was not created"))
+            .build()
     }
 
     @GET
@@ -49,11 +47,43 @@ class OrderController {
 
         val order = orderService.getOrder(id)
 
-        return if (order == null) {
-            Response.status(Response.Status.NOT_FOUND)
-                .entity(mapOf("error" to "Order not found")).build()
-        } else {
-            Response.status(Response.Status.OK).entity(order).build()
+        if (order == null) {
+            return Response.status(Response.Status.NOT_FOUND).entity(mapOf("error" to "Order not found")).build()
         }
+        return Response.status(Response.Status.OK).entity(order).build()
+    }
+
+    @PUT
+    @Path("/order/{id}")
+    fun update(@PathParam("id") id: String, order: Order): Response {
+        if (order.orderID == null) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity(mapOf("error" to "Order ID must be present in body")).build()
+        }
+
+        if (id.length != 36 || order.orderID!!.length != 36) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity(mapOf("error" to "Order ID must be 36 characters")).build()
+        }
+
+        if (id != order.orderID) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity(mapOf("error" to "Order ID in path and body must match")).build()
+        }
+
+        if (order.totalPrice != order.books.sumOf { it.totalPrice }) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity(mapOf("error" to "Order price doesn't match sum of books prices")).build()
+        }
+
+        if (!order.books.all { it.price * it.quantity == it.totalPrice }) {
+            return Response.status(Response.Status.BAD_REQUEST)
+                .entity(mapOf("error" to "Books price times quantity doesn't match it's total price")).build()
+        }
+
+        if (orderService.updateOrder(order)) {
+            return Response.status(Response.Status.NO_CONTENT).build()
+        }
+        return Response.status(Response.Status.NOT_FOUND).entity(mapOf("error" to "Order not found")).build()
     }
 }

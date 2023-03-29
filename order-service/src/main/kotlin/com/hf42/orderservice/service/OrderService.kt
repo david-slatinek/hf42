@@ -17,15 +17,19 @@ class OrderService {
         return mongoClient.getDatabase("order-service").getCollection("orders", Order::class.java)
     }
 
-    fun insertOrder(order: Order): String? {
+    fun insertOrder(order: Order): Boolean {
         val id = getCollection().insertOne(order)
         if (id.insertedId == null) {
-            return null
+            return false
         }
-        return id.insertedId.asObjectId().value.toHexString()
+        return true
     }
 
     fun getOrder(id: String): Order? {
         return getCollection().find(eq("orderID", id)).first()
+    }
+
+    fun updateOrder(order: Order): Boolean {
+        return getCollection().replaceOne(eq("orderID", order.orderID), order).matchedCount == 1L
     }
 }

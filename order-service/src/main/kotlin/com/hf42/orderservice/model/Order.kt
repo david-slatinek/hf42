@@ -15,7 +15,7 @@ data class Order @BsonCreator constructor(
     @field:Null(message = "Order ID must be null")
     @field:Size(min = 36, max = 36, message = "Order ID must be 36 characters")
     @param:BsonProperty("orderID")
-    var orderID: String?,
+    var orderID: String? = null,
 
     @field:NotBlank(message = "Customer ID is required")
     @field:Size(min = 24, max = 24, message = "Customer ID must be 24 characters")
