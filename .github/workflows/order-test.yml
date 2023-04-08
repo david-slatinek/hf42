@@ -53,4 +53,13 @@ jobs:
         run: gradle build -x test
 
       - name: Run tests with Gradle Wrapper
-        run: gradle test --stacktrace --debug
+        run: gradle test --debug
+
+      - name: Upload test results
+        uses: actions/upload-artifact@v3
+        if: always()
+        with:
+          name: test-results
+          path: |
+            order-service/build/test-results/test
+            order-service/build/reports/tests/test
