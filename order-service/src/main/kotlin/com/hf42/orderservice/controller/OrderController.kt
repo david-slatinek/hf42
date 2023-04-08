@@ -35,6 +35,7 @@ class OrderController {
         order.orderID = UUID.randomUUID().toString()
 
         if (orderService.insertOrder(order)) {
+            producer.produce(order)
             return Response.status(Response.Status.CREATED).entity(mapOf("orderID" to order.orderID)).build()
         }
         return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(mapOf("error" to "Order was not created"))
@@ -44,8 +45,6 @@ class OrderController {
     @GET
     @Path("/order/{id}")
     fun get(@PathParam("id") id: String): Response {
-        producer.produce("Hello from Order Service!")
-
         if (id.length != 36) {
             return Response.status(Response.Status.BAD_REQUEST)
                 .entity(mapOf("error" to "Order ID must be 36 characters")).build()

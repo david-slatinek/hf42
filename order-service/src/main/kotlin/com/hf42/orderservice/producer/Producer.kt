@@ -1,5 +1,8 @@
 package com.hf42.orderservice.producer
 
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.fasterxml.jackson.databind.ObjectWriter
+import com.hf42.orderservice.model.Order
 import com.rabbitmq.client.Channel
 import com.rabbitmq.client.Connection
 import com.rabbitmq.client.ConnectionFactory
@@ -14,11 +17,12 @@ class Producer(
     @ConfigProperty(name = "rabbitmq.password") password: String,
     @ConfigProperty(name = "rabbitmq.port") port: Int,
     @ConfigProperty(name = "rabbitmq.queue") queue: String,
-    @ConfigProperty(name = "rabbitmq.exchange") var exchange: String
+    @ConfigProperty(name = "rabbitmq.exchange") var exchange: String,
 ) {
     private final var factory: ConnectionFactory = ConnectionFactory()
     private final var connection: Connection
     private final var channel: Channel
+    val mapper: ObjectWriter = ObjectMapper().writer()
 
     init {
         factory.host = host
@@ -31,7 +35,8 @@ class Producer(
         channel.queueDeclare(queue, true, false, false, null)
     }
 
-    fun produce(message: String) {
+    fun produce(order: Order) {
+        val message = mapper.writeValueAsString(order)
         channel.basicPublish(exchange, "", null, message.toByteArray())
     }
 }
