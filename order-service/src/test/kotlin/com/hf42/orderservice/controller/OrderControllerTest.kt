@@ -38,6 +38,7 @@ class OrderControllerTest {
             book
         }
         body["totalPrice"] = 20
+        body["status"] = "test"
 
         val addResponse = given()
             .`when`()
@@ -90,6 +91,7 @@ class OrderControllerTest {
             book
         }
         body["totalPrice"] = 20
+        body["status"] = "test"
 
         val addResponse = given()
             .`when`()
@@ -157,6 +159,7 @@ class OrderControllerTest {
             book
         }
         body["totalPrice"] = 20
+        body["status"] = "test"
 
         val addResponse = given()
             .`when`()
@@ -201,6 +204,7 @@ class OrderControllerTest {
             book
         }
         updateBody["totalPrice"] = 20
+        body["status"] = "test"
 
         given()
             .`when`()
@@ -244,6 +248,7 @@ class OrderControllerTest {
             book
         }
         body["totalPrice"] = 20
+        body["status"] = "test"
 
         val addResponse = given()
             .`when`()

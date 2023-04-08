@@ -39,5 +39,8 @@ data class Order @BsonCreator constructor(
     @field:NotNull(message = "Total price is required")
     @field:Positive(message = "Total price must be greater than 0")
     @param:BsonProperty("totalPrice")
-    val totalPrice: Double
+    val totalPrice: Double,
+
+    @param:BsonProperty("status")
+    var status: String = "pending",
 )
