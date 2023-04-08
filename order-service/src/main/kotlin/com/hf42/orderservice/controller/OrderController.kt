@@ -1,6 +1,7 @@
 package com.hf42.orderservice.controller
 
 import com.hf42.orderservice.model.Order
+import com.hf42.orderservice.producer.Producer
 import com.hf42.orderservice.service.OrderService
 import java.util.UUID
 import javax.inject.Inject
@@ -14,6 +15,9 @@ import javax.ws.rs.core.Response
 class OrderController {
     @Inject
     lateinit var orderService: OrderService
+
+    @Inject
+    lateinit var producer: Producer
 
     @POST
     @Path("/order")
@@ -40,6 +44,8 @@ class OrderController {
     @GET
     @Path("/order/{id}")
     fun get(@PathParam("id") id: String): Response {
+        producer.produce("Hello from Order Service!")
+
         if (id.length != 36) {
             return Response.status(Response.Status.BAD_REQUEST)
                 .entity(mapOf("error" to "Order ID must be 36 characters")).build()

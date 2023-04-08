@@ -19,10 +19,7 @@ class OrderService {
 
     fun insertOrder(order: Order): Boolean {
         val id = getCollection().insertOne(order)
-        if (id.insertedId == null) {
-            return false
-        }
-        return true
+        return id.insertedId != null
     }
 
     fun getOrder(id: String): Order? {
