@@ -1,0 +1,32 @@
+version: "3.9"
+
+services:
+  rabbit:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbit-con
+    hostname: rabbit
+    restart: on-failure
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    volumes:
+      - rabbitmq_data:/var/lib/rabbitmq/
+      - rabbitmq_log:/var/log/rabbitmq
+    deploy:
+      resources:
+        limits:
+          memory: 200M
+
+volumes:
+  rabbitmq_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: $HOME/rabbitmq/data/
+  rabbitmq_log:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: $HOME/rabbitmq/log/
