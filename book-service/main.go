@@ -16,7 +16,7 @@ import (
 	"main/db"
 	_ "main/docs"
 	"main/env"
-	bookService "main/schema"
+	pb "main/schema"
 	"main/server"
 	"net"
 	"net/http"
@@ -124,7 +124,7 @@ func main() {
 		},
 	}
 
-	bookService.RegisterBookServiceServer(grpcServer, mainGrpcServer)
+	pb.RegisterBookServiceServer(grpcServer, mainGrpcServer)
 	reflection.Register(grpcServer)
 
 	c := make(chan os.Signal, 1)

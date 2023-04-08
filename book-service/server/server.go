@@ -7,17 +7,17 @@ import (
 	"google.golang.org/grpc/status"
 	"log"
 	"main/db"
-	bookService "main/schema"
+	pb "main/schema"
 )
 
 type Server struct {
-	bookService.BookServiceServer
+	pb.BookServiceServer
 	Collection db.BookCollection
 }
 
-func (server Server) ValidateBooks(request *bookService.ValidateBooksRequest, stream bookService.BookService_ValidateBooksServer) error {
+func (server Server) ValidateBooks(request *pb.ValidateBooksRequest, stream pb.BookService_ValidateBooksServer) error {
 	if len(request.BooksISBN) == 0 {
-		err := stream.Send(&bookService.ValidateBooksResponse{
+		err := stream.Send(&pb.ValidateBooksResponse{
 			Valid: false,
 			Error: "no books to validate",
 		})
@@ -33,7 +33,7 @@ func (server Server) ValidateBooks(request *bookService.ValidateBooksRequest, st
 		_, err := server.Collection.GetBookByISBN(isbn)
 
 		if errors.Is(err, mongo.ErrNoDocuments) {
-			err := stream.Send(&bookService.ValidateBooksResponse{
+			err := stream.Send(&pb.ValidateBooksResponse{
 				Valid: false,
 				Error: "book with isbn=" + isbn + " not found",
 			})
@@ -45,7 +45,7 @@ func (server Server) ValidateBooks(request *bookService.ValidateBooksRequest, st
 		}
 
 		if err != nil {
-			err := stream.Send(&bookService.ValidateBooksResponse{
+			err := stream.Send(&pb.ValidateBooksResponse{
 				Valid: false,
 				Error: err.Error(),
 			})
@@ -55,7 +55,7 @@ func (server Server) ValidateBooks(request *bookService.ValidateBooksRequest, st
 			continue
 		}
 
-		err = stream.Send(&bookService.ValidateBooksResponse{
+		err = stream.Send(&pb.ValidateBooksResponse{
 			Valid: true,
 		})
 		if err != nil {
