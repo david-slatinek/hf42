@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"log"
+	"main/client"
 	"main/env"
 	"main/messaging"
 	"main/model"
@@ -24,6 +25,16 @@ func main() {
 	}
 	defer msg.Close()
 
+	cli, err := client.NewClient()
+	if err != nil {
+		log.Fatalf("error with client: %s\n", err)
+	}
+	defer func(cli client.Client) {
+		if err := cli.Close(); err != nil {
+			log.Printf("error with closing client: %s\n", err)
+		}
+	}(cli)
+
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGTERM)
 
@@ -41,11 +52,16 @@ func main() {
 					continue
 				}
 
-				log.Printf("Received order: %v", ord)
+				err = cli.ValidateBooks(ord)
+				if err != nil {
+					log.Printf("error with validating books: %s\n", err)
+					continue
+				}
+				log.Println("books validated")
 			}
 		}
 	}()
 
-	fmt.Println("Waiting for orders...")
+	fmt.Println("waiting for orders...")
 	<-c
 }
