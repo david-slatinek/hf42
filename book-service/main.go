@@ -9,11 +9,16 @@ import (
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
 	"go.mongodb.org/mongo-driver/mongo/readpref"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/reflection"
 	"log"
 	"main/controller"
 	"main/db"
 	_ "main/docs"
 	"main/env"
+	bookService "main/schema"
+	"main/server"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -39,7 +44,7 @@ import (
 //	@externalDocs.description	OpenAPI
 //	@externalDocs.url			https://swagger.io/resources/open-api/
 
-//	@host	localhost:8080
+// @host	localhost:8080
 func main() {
 	err := env.Load("env/.env")
 	if err != nil {
@@ -106,9 +111,37 @@ func main() {
 		}
 	}()
 
+	listener, err := net.Listen("tcp", ":9000")
+	if err != nil {
+		log.Fatalf("Failed to listen on port 9000 with error: %v\n", err)
+	}
+
+	grpcServer := grpc.NewServer()
+
+	mainGrpcServer := server.Server{
+		Collection: db.BookCollection{
+			Collection: client.Database("book-service").Collection("books"),
+		},
+	}
+
+	bookService.RegisterBookServiceServer(grpcServer, mainGrpcServer)
+	reflection.Register(grpcServer)
+
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGTERM)
-	<-c
+
+	go func() {
+		<-c
+		_, cancel := context.WithTimeout(context.Background(), 5)
+		defer cancel()
+
+		grpcServer.GracefulStop()
+		log.Println("shutting down gRPC server")
+	}()
+
+	if err := grpcServer.Serve(listener); err != nil {
+		log.Fatalf("Failed to serve, error: %v", err)
+	}
 
 	ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()

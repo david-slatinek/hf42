@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+package schema;
+
+option go_package = "./";
+
+message ValidateBooksRequest {
+  repeated string booksISBN = 1;
+}
+
+message ValidateBooksResponse {
+  bool valid = 1;
+  string error = 2;
+}
+
+service BookService {
+  rpc ValidateBooks(ValidateBooksRequest) returns (stream ValidateBooksResponse);
+}
