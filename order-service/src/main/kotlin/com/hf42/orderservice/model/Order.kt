@@ -41,6 +41,9 @@ data class Order @BsonCreator constructor(
     @param:BsonProperty("totalPrice")
     val totalPrice: Double,
 
+    @field:NotNull(message = "Status is required")
+    @field:Pattern(regexp = "^(pending|shipped|delivered)\$", message = "Status must be pending, shipped, or delivered")
+    @field:Size(min = 7, max = 9, message = "Status must be 7 or 9 characters")
     @param:BsonProperty("status")
     var status: String = "pending",
 )

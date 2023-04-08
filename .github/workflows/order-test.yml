@@ -53,7 +53,7 @@ jobs:
         run: gradle build -x test
 
       - name: Run tests with Gradle Wrapper
-        run: gradle test --debug
+        run: gradle test
 
       - name: Upload test results
         uses: actions/upload-artifact@v3

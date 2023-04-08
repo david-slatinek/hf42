@@ -204,7 +204,7 @@ class OrderControllerTest {
             book
         }
         updateBody["totalPrice"] = 20
-        body["status"] = "test"
+        updateBody["status"] = "test"
 
         given()
             .`when`()
