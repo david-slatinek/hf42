@@ -16,8 +16,8 @@ class Producer(
     @ConfigProperty(name = "rabbitmq.username") username: String,
     @ConfigProperty(name = "rabbitmq.password") password: String,
     @ConfigProperty(name = "rabbitmq.port") port: Int,
-    @ConfigProperty(name = "rabbitmq.queue") queue: String,
     @ConfigProperty(name = "rabbitmq.exchange") var exchange: String,
+    @ConfigProperty(name = "rabbitmq.queue") queue: String,
 ) {
     private final var factory: ConnectionFactory = ConnectionFactory()
     private final var connection: Connection
