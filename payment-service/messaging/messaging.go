@@ -1,11 +1,9 @@
 package messaging
 
 import (
-	"context"
 	amqp "github.com/rabbitmq/amqp091-go"
 	"log"
 	"os"
-	"time"
 )
 
 type Messaging struct {
@@ -63,21 +61,6 @@ func (receiver *Messaging) Close() {
 	}
 }
 
-func (receiver *Messaging) write(message string) error {
-	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
-	defer cancel()
-
-	return receiver.channel.PublishWithContext(ctx,
-		os.Getenv("EXCHANGE_QUEUE_NAME"),
-		receiver.queue.Name,
-		false,
-		false,
-		amqp.Publishing{
-			ContentType: "application/json",
-			Body:        []byte(message),
-		})
-}
-
 func (receiver *Messaging) Consume() (<-chan amqp.Delivery, error) {
-	return receiver.channel.Consume(receiver.queue.Name, "", false, false, false, false, nil)
+	return receiver.channel.Consume(receiver.queue.Name, "", true, false, false, false, nil)
 }

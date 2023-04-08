@@ -1,10 +1,12 @@
 package main
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"main/env"
 	"main/messaging"
+	"main/model"
 	"os"
 	"os/signal"
 	"syscall"
@@ -18,8 +20,9 @@ func main() {
 
 	msg, err := messaging.NewMessaging()
 	if err != nil {
-		log.Printf("error with messaging: %s\n", err)
+		log.Fatalf("error with messaging: %s\n", err)
 	}
+	defer msg.Close()
 
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGTERM)
@@ -30,11 +33,15 @@ func main() {
 			log.Printf("error with consuming: %s\n", err)
 		} else {
 			for order := range orders {
-				if order.Ack(false) != nil {
-					log.Printf("error with acking: %s\n", err)
+
+				var ord model.Order
+				err := json.Unmarshal(order.Body, &ord)
+				if err != nil {
+					log.Printf("error with unmarshalling: %s\n", err)
 					continue
 				}
-				log.Printf("Received a message: %s", order.Body)
+
+				log.Printf("Received order: %v", ord)
 			}
 		}
 	}()
