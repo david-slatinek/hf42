@@ -1,0 +1,51 @@
+version: "3.9"
+
+services:
+  book-service:
+    build:
+      context: ./book-service
+    ports:
+      - "8080:8080"
+      - "9000:9000"
+    container_name: book-service-api
+    hostname: book-service
+    restart: on-failure
+    networks:
+      - hf42-network
+
+  order-service:
+    build:
+      context: ./order-service
+    ports:
+      - "7000:7000"
+    container_name: order-service-api
+    hostname: order-service
+    restart: on-failure
+    networks:
+      - hf42-network
+
+  payment-service:
+    build:
+      context: ./payment-service
+    container_name: payment-service-api
+    hostname: payment-service
+    restart: on-failure
+    networks:
+      - hf42-network
+    depends_on: [ book-service ]
+
+  user-service:
+    build:
+      context: ./user-service
+    ports:
+      - "9500:9500"
+    container_name: user-service-api
+    hostname: user-service
+    restart: on-failure
+    networks:
+      - hf42-network
+
+networks:
+  hf42-network:
+    name: hf42-network
+    driver: bridge
