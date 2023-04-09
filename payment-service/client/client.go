@@ -8,6 +8,7 @@ import (
 	"io"
 	"main/model"
 	pb "main/schema"
+	"os"
 	"time"
 )
 
@@ -17,7 +18,7 @@ type Client struct {
 }
 
 func NewClient() (Client, error) {
-	conn, err := grpc.Dial("book-service:9000", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial(os.Getenv("BOOK_URL")+":9000", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return Client{}, err
 	}

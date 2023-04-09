@@ -42,8 +42,14 @@ type Book struct {
 	Publisher string `json:"publisher" bson:"publisher" binding:"required" example:"Pan Books Ltd" validate:"required" minLength:"1"`
 	// Language is the language of the book
 	Language string `json:"language" bson:"language" binding:"required" example:"English" validate:"required" minLength:"1"`
+
+	// Quantity amount of books
+	Quantity int `json:"quantity" binding:"required" validate:"required" min:"1"`
 	// Price is the price of the book
 	Price float32 `json:"price" bson:"price" binding:"required,min=0" example:"21.99" validate:"required" min:"0"`
+
+	// TotalPrice total amount for book, Quantity * Price
+	TotalPrice float32 `json:"totalPrice" binding:"required" validate:"required" min:"0"`
 }
 
 func (receiver Book) Equal(book Book) bool {

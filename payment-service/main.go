@@ -9,6 +9,7 @@ import (
 	"main/env"
 	"main/messaging"
 	"main/model"
+	"main/pdf"
 	"os"
 	"os/signal"
 	"syscall"
@@ -77,10 +78,18 @@ func main() {
 					continue
 				}
 				log.Printf("order created: %s\n", ord.OrderID)
+
+				err = pdf.CreatePDF(ord)
+				if err != nil {
+					log.Printf("error with pdf: %s\n", err)
+					continue
+				}
+				log.Printf("pdf created for order: %s\n", ord.OrderID)
 			}
 		}
 	}()
 
 	fmt.Println("waiting for orders...")
 	<-c
+	fmt.Println("exiting...")
 }

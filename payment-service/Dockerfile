@@ -16,6 +16,10 @@ COPY --from=build /api/main ./
 RUN mkdir env
 COPY --from=build /api/env/.env ./env
 
+RUN mkdir logo
+COPY --from=build /api/logo ./logo
+
 ENV GIN_MODE=release
+ENV BOOK_URL=book-service
 
 CMD ["./main"]
