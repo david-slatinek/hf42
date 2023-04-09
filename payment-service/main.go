@@ -7,6 +7,7 @@ import (
 	"main/client"
 	"main/db"
 	"main/env"
+	"main/file"
 	"main/messaging"
 	"main/model"
 	"main/pdf"
@@ -85,6 +86,13 @@ func main() {
 					continue
 				}
 				log.Printf("pdf created for order: %s\n", ord.OrderID)
+
+				err = file.UploadFile(ord.OrderID)
+				if err != nil {
+					log.Printf("error with uploading file: %s\n", err)
+					continue
+				}
+				log.Printf("file uploaded for order: %s\n", ord.OrderID)
 			}
 		}
 	}()
