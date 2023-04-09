@@ -19,6 +19,7 @@ func (server Server) ValidateBooks(request *pb.ValidateBooksRequest, stream pb.B
 	if len(request.BooksISBN) == 0 {
 		err := stream.Send(&pb.ValidateBooksResponse{
 			Valid: false,
+			Code:  int32(codes.InvalidArgument),
 			Error: "no books to validate",
 		})
 
@@ -35,6 +36,7 @@ func (server Server) ValidateBooks(request *pb.ValidateBooksRequest, stream pb.B
 		if errors.Is(err, mongo.ErrNoDocuments) {
 			err := stream.Send(&pb.ValidateBooksResponse{
 				Valid: false,
+				Code:  int32(codes.NotFound),
 				Error: "book with isbn=" + isbn + " not found",
 			})
 
@@ -47,6 +49,7 @@ func (server Server) ValidateBooks(request *pb.ValidateBooksRequest, stream pb.B
 		if err != nil {
 			err := stream.Send(&pb.ValidateBooksResponse{
 				Valid: false,
+				Code:  int32(codes.Internal),
 				Error: err.Error(),
 			})
 			if err != nil {
@@ -57,6 +60,7 @@ func (server Server) ValidateBooks(request *pb.ValidateBooksRequest, stream pb.B
 
 		err = stream.Send(&pb.ValidateBooksResponse{
 			Valid: true,
+			Code:  int32(codes.OK),
 		})
 		if err != nil {
 			log.Printf("error while sending response: %v\n", err)

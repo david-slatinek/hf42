@@ -10,7 +10,8 @@ message ValidateBooksRequest {
 
 message ValidateBooksResponse {
   bool valid = 1;
-  string error = 2;
+  int32 code = 2;
+  string error = 3;
 }
 
 service BookService {

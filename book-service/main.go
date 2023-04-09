@@ -131,17 +131,15 @@ func main() {
 	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGTERM)
 
 	go func() {
-		<-c
-		_, cancel := context.WithTimeout(context.Background(), 5)
-		defer cancel()
-
-		grpcServer.GracefulStop()
-		log.Println("shutting down gRPC server")
+		if err := grpcServer.Serve(listener); err != nil {
+			log.Fatalf("Failed to serve, error: %v", err)
+		}
 	}()
 
-	if err := grpcServer.Serve(listener); err != nil {
-		log.Fatalf("Failed to serve, error: %v", err)
-	}
+	<-c
+
+	grpcServer.GracefulStop()
+	log.Println("shutting down gRPC server")
 
 	ctx, cancel = context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
