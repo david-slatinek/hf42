@@ -30,6 +30,8 @@ func (server Server) ValidateBooks(request *pb.ValidateBooksRequest, stream pb.B
 		return status.Error(codes.InvalidArgument, "no books to validate")
 	}
 
+	log.Println("books to validate: ", request.BooksISBN)
+
 	for _, isbn := range request.BooksISBN {
 		_, err := server.Collection.GetBookByISBN(isbn)
 

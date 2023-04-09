@@ -43,6 +43,8 @@ func main() {
 		if err != nil {
 			log.Printf("error with consuming: %s\n", err)
 		} else {
+			log.Printf("orders length: %d\n", len(orders))
+
 			for order := range orders {
 
 				var ord model.Order
