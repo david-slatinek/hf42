@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  db:
+    build: .
+    ports:
+      - "3306:3306"
+    volumes:
+      - ${HOME}/payment-db/:/var/lib/mysql
+    env_file: .env
+    container_name: payment-db-con
+    hostname: payment-db
+    restart: on-failure
+    deploy:
+      resources:
+        limits:
+          memory: 220M
