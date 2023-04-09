@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"main/client"
+	"main/db"
 	"main/env"
 	"main/messaging"
 	"main/model"
@@ -35,6 +36,16 @@ func main() {
 		}
 	}(cli)
 
+	paymentDB, err := db.NewPaymentDB()
+	if err != nil {
+		log.Fatalf("error with payment db: %s\n", err)
+	}
+	defer func(paymentDB db.PaymentDB) {
+		if err := paymentDB.Close(); err != nil {
+			log.Printf("error with closing payment db: %s\n", err)
+		}
+	}(paymentDB)
+
 	c := make(chan os.Signal, 1)
 	signal.Notify(c, os.Interrupt, os.Kill, syscall.SIGTERM)
 
@@ -46,7 +57,6 @@ func main() {
 			log.Printf("orders length: %d\n", len(orders))
 
 			for order := range orders {
-
 				var ord model.Order
 				err := json.Unmarshal(order.Body, &ord)
 				if err != nil {
@@ -59,7 +69,15 @@ func main() {
 					log.Printf("error with validating books: %s\n", err)
 					continue
 				}
-				log.Println("books validated")
+
+				log.Printf("books validated for order: %s\n", ord.OrderID)
+
+				err = paymentDB.CreateOrder(ord)
+				if err != nil {
+					log.Printf("error with creating order: %s\n", err)
+					continue
+				}
+				log.Printf("order created: %s\n", ord.OrderID)
 			}
 		}
 	}()

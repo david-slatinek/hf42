@@ -1,11 +1,10 @@
 package model
 
-import "time"
-
 type Order struct {
-	CustomerID string    `json:"customer_id"`
-	OrderDate  time.Time `json:"order_date"`
-	Books      []Book    `json:"books"`
-	TotalPrice float32   `json:"total_price"`
-	Status     string    `json:"status"`
+	OrderID    string  `json:"orderID"`
+	CustomerID string  `json:"customerID"`
+	OrderDate  string  `json:"orderDate"`
+	Books      []Book  `json:"books"`
+	TotalPrice float32 `json:"totalPrice"`
+	Status     string  `json:"status"`
 }

@@ -23,11 +23,11 @@ type Book struct {
 	Categories []string `json:"categories" bson:"categories" example:"'Science Fiction', 'Fantasy'" validate:"required" minLength:"1"`
 
 	// OriginalTitle is the title of the original book
-	OriginalTitle string `json:"original_title" bson:"original_title,omitempty" example:"The Hitchhiker's Guide to the Galaxy" validate:"optional" minLength:"1"`
+	OriginalTitle string `json:"originalTitle" bson:"original_title,omitempty" example:"The Hitchhiker's Guide to the Galaxy" validate:"optional" minLength:"1"`
 	// OriginalSubtitle is the subtitle of the original book
-	OriginalSubtitle string `json:"original_subtitle" bson:"original_subtitle,omitempty" example:"A Trilogy in Five Parts" validate:"optional" minLength:"1"`
+	OriginalSubtitle string `json:"originalSubtitle" bson:"original_subtitle,omitempty" example:"A Trilogy in Five Parts" validate:"optional" minLength:"1"`
 	// OriginalAuthor is the author of the original book
-	OriginalYear int `json:"original_year" bson:"original_year,omitempty" binding:"min=0" example:"1979" validate:"optional" min:"0"`
+	OriginalYear int `json:"originalYear" bson:"original_year,omitempty" binding:"min=0" example:"1979" validate:"optional" min:"0"`
 	// OriginalDescription is a short description of the original book
 	Translator string `json:"translator" bson:"translator,omitempty" example:"John Stone" validate:"optional" minLength:"1"`
 
