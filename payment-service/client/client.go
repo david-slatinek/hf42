@@ -59,7 +59,7 @@ func (receiver Client) ValidateBooks(order model.Order) error {
 			break
 		}
 
-		if response.Valid == false || response.Error != "" {
+		if response.Valid == false || response.Code != 0 || response.Error != "" {
 			return errors.New(response.Error)
 		}
 

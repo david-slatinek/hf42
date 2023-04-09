@@ -61,6 +61,7 @@ func (server Server) ValidateBooks(request *pb.ValidateBooksRequest, stream pb.B
 		err = stream.Send(&pb.ValidateBooksResponse{
 			Valid: true,
 			Code:  int32(codes.OK),
+			Error: "",
 		})
 		if err != nil {
 			log.Printf("error while sending response: %v\n", err)
