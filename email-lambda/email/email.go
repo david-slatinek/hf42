@@ -30,7 +30,7 @@ func SendEmail(location string) error {
 		Expiry:       time.Now(),
 	}
 
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 5*time.Second)
 	defer cancel()
 
 	client := config.Client(ctx, &token)

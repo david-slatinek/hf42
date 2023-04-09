@@ -8,17 +8,17 @@ import (
 	"os"
 )
 
-func UploadFile(orderID string) (string, error) {
+func UploadFile(orderID string) error {
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(os.Getenv("REGION"))},
 	)
 	if err != nil {
-		return "", err
+		return err
 	}
 
 	f, err := os.Open("invoice.pdf")
 	if err != nil {
-		return "", err
+		return err
 	}
 	defer func(f *os.File) {
 		if err := f.Close(); err != nil {
@@ -32,11 +32,11 @@ func UploadFile(orderID string) (string, error) {
 
 	uploader := s3manager.NewUploader(sess)
 
-	result, err := uploader.Upload(&s3manager.UploadInput{
+	_, err = uploader.Upload(&s3manager.UploadInput{
 		Bucket: aws.String(os.Getenv("BUCKET_NAME")),
 		Key:    aws.String(orderID + ".pdf"),
 		ACL:    aws.String("public-read"),
 		Body:   f,
 	})
-	return result.Location, err
+	return err
 }
