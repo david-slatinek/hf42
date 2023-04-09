@@ -3,10 +3,8 @@ version: "3.9"
 services:
   api:
     build: .
-    ports:
-      - "9500:9500"
-    container_name: user-service-api
-    hostname: user-service
+    container_name: payment-service-api
+    hostname: payment-service
     restart: on-failure
     networks:
       - hf42-network

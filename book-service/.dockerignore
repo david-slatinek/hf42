@@ -1,5 +1,6 @@
 *_test.go
 env/.env-example
+env/.gitignore
 .gitignore
 diagram.drawio
 diagram.png

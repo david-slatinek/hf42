@@ -1,0 +1,8 @@
+.gradle
+.idea
+build
+.gitignore
+diagram.drawio
+diagram.png
+gradlew.bat
+README.md

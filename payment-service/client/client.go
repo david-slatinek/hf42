@@ -17,7 +17,7 @@ type Client struct {
 }
 
 func NewClient() (Client, error) {
-	conn, err := grpc.Dial("localhost:9000", grpc.WithTransportCredentials(insecure.NewCredentials()))
+	conn, err := grpc.Dial("book-service:9000", grpc.WithTransportCredentials(insecure.NewCredentials()))
 	if err != nil {
 		return Client{}, err
 	}

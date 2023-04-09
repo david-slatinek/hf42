@@ -8,3 +8,10 @@ services:
     container_name: order-service-api
     hostname: order-service
     restart: on-failure
+    networks:
+      - hf42-network
+
+networks:
+  hf42-network:
+    name: hf42-network
+    driver: bridge

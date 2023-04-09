@@ -69,7 +69,6 @@ func main() {
 					log.Printf("error with validating books: %s\n", err)
 					continue
 				}
-
 				log.Printf("books validated for order: %s\n", ord.OrderID)
 
 				err = paymentDB.CreateOrder(ord)
