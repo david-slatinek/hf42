@@ -6,6 +6,7 @@ import (
 	"log"
 	"main/client"
 	"main/db"
+	"main/email"
 	"main/env"
 	"main/file"
 	"main/messaging"
@@ -87,12 +88,19 @@ func main() {
 				}
 				log.Printf("pdf created for order: %s\n", ord.OrderID)
 
-				err = file.UploadFile(ord.OrderID)
+				location, err := file.UploadFile(ord.OrderID)
 				if err != nil {
 					log.Printf("error with uploading file: %s\n", err)
 					continue
 				}
 				log.Printf("file uploaded for order: %s\n", ord.OrderID)
+
+				err = email.SendEmail(location)
+				if err != nil {
+					log.Printf("error with sending email: %s\n", err)
+					continue
+				}
+				log.Printf("email sent for order: %s\n", ord.OrderID)
 			}
 		}
 	}()

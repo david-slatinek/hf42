@@ -8,17 +8,17 @@ import (
 	"os"
 )
 
-func UploadFile(orderID string) error {
+func UploadFile(orderID string) (string, error) {
 	sess, err := session.NewSession(&aws.Config{
 		Region: aws.String(os.Getenv("REGION"))},
 	)
 	if err != nil {
-		return err
+		return "", err
 	}
 
 	f, err := os.Open("invoice.pdf")
 	if err != nil {
-		return err
+		return "", err
 	}
 	defer func(f *os.File) {
 		if err := f.Close(); err != nil {
@@ -38,9 +38,5 @@ func UploadFile(orderID string) error {
 		ACL:    aws.String("public-read"),
 		Body:   f,
 	})
-	if err != nil {
-		return err
-	}
-	fmt.Printf("file uploaded to, %s\n", result.Location)
-	return nil
+	return result.Location, err
 }
