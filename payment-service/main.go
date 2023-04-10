@@ -66,6 +66,11 @@ func main() {
 					continue
 				}
 
+				if ord.Status == "test" {
+					log.Printf("order status is test, skipping: %s\n", ord.OrderID)
+					continue
+				}
+
 				err = cli.ValidateBooks(ord)
 				if err != nil {
 					log.Printf("error with validating books: %s\n", err)
