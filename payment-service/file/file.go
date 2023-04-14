@@ -10,8 +10,9 @@ import (
 
 func UploadFile(orderID string) error {
 	sess, err := session.NewSession(&aws.Config{
-		Region: aws.String(os.Getenv("REGION"))},
-	)
+		Region:                        aws.String(os.Getenv("REGION")),
+		CredentialsChainVerboseErrors: aws.Bool(true),
+	})
 	if err != nil {
 		return err
 	}
