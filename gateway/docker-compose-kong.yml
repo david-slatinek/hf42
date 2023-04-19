@@ -1,0 +1,56 @@
+version: "3.9"
+
+services:
+  kong-database:
+    image: postgres:15-alpine
+    container_name: kong-database
+    hostname: kong-database
+    restart: on-failure
+    environment:
+      POSTGRES_USER: kong
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: kong
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+    networks:
+      - hf42-network
+
+  kong:
+    depends_on:
+      - kong-database
+    image: kong:3.2.2
+    container_name: kong
+    hostname: kong
+    restart: on-failure
+    ports:
+      - "127.0.0.1:8001:8001"
+      - "8000:8000"
+      - "9080:9080"
+      - "9081:9081"
+    networks:
+      - hf42-network
+    environment:
+      KONG_DATABASE: postgres
+      KONG_PG_HOST: kong-database
+      KONG_PG_USER: kong
+      KONG_PG_PASSWORD: ${POSTGRES_PASSWORD}
+      KONG_PROXY_ACCESS_LOG: /dev/stdout
+      KONG_ADMIN_ACCESS_LOG: /dev/stdout
+      KONG_PROXY_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_ERROR_LOG: /dev/stderr
+      KONG_ADMIN_LISTEN: 0.0.0.0:8001,0.0.0.0:9080 http2,0.0.0.0:9081 http2 ssl
+
+networks:
+  hf42-network:
+    name: hf42-network
+    driver: bridge
+
+volumes:
+  db_data:
+    driver: local
+    driver_opts:
+      type: none
+      o: bind
+      device: $HOME/kong
