@@ -7,6 +7,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"go.mongodb.org/mongo-driver/mongo"
 	"go.mongodb.org/mongo-driver/mongo/options"
+	"log"
 	"main/db"
 	"main/env"
 	"main/model"
@@ -38,7 +39,8 @@ var testBook = model.Book{
 }
 
 func getClient() *mongo.Client {
-	_ = env.Load("../env/.env")
+	err := env.Load("../env/.env")
+	log.Println("env:", err)
 
 	serverAPIOptions := options.ServerAPI(options.ServerAPIVersion1)
 	clientOptions := options.Client().ApplyURI(os.Getenv("MONGO_URL")).SetServerAPIOptions(serverAPIOptions)
@@ -46,7 +48,8 @@ func getClient() *mongo.Client {
 	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
 	defer cancel()
 
-	client, _ := mongo.Connect(ctx, clientOptions)
+	client, err := mongo.Connect(ctx, clientOptions)
+	log.Println("client:", err)
 	return client
 }
 
