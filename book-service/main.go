@@ -95,7 +95,7 @@ func main() {
 	router.PUT("/book", bookController.UpdateBook)
 	router.DELETE("/book/:isbn", bookController.DeleteBookByISBN)
 
-	router.GET("/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.GET("/book/docs/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	srv := &http.Server{
 		Addr:         ":8080",
