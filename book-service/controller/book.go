@@ -127,3 +127,28 @@ func (receiver BookController) DeleteBookByISBN(ctx *gin.Context) {
 	}
 	ctx.Status(http.StatusNoContent)
 }
+
+// GetBooks godoc
+//
+//	@Summary		Get all books
+//	@Description	Get all books
+//	@Tags			books
+//	@Produce		json
+//	@Success		200	{object}	model.Book	"Book objects"
+//	@Failure		404	{object}	model.Error	"Books not found"
+//	@Failure		500	{object}	model.Error	"Internal server error"
+//	@Router			/books [get]
+func (receiver BookController) GetBooks(ctx *gin.Context) {
+	books, err := receiver.Collection.GetBooks()
+
+	if errors.Is(err, mongo.ErrNoDocuments) || len(books) == 0 {
+		ctx.JSON(http.StatusNotFound, model.Error{Error: "books not found"})
+		return
+	}
+
+	if err != nil {
+		ctx.JSON(http.StatusInternalServerError, model.Error{Error: err.Error()})
+		return
+	}
+	ctx.JSON(http.StatusOK, books)
+}

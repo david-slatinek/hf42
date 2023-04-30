@@ -192,6 +192,38 @@ const docTemplate = `{
                     }
                 }
             }
+        },
+        "/books": {
+            "get": {
+                "description": "Get all books",
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "books"
+                ],
+                "summary": "Get all books",
+                "responses": {
+                    "200": {
+                        "description": "Book objects",
+                        "schema": {
+                            "$ref": "#/definitions/model.Book"
+                        }
+                    },
+                    "404": {
+                        "description": "Books not found",
+                        "schema": {
+                            "$ref": "#/definitions/model.Error"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal server error",
+                        "schema": {
+                            "$ref": "#/definitions/model.Error"
+                        }
+                    }
+                }
+            }
         }
     },
     "definitions": {

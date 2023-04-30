@@ -92,6 +92,7 @@ func main() {
 
 	router.POST("/book", bookController.CreateBook)
 	router.GET("/book/:isbn", bookController.GetBookByISBN)
+	router.GET("/books", bookController.GetBooks)
 	router.PUT("/book", bookController.UpdateBook)
 	router.DELETE("/book/:isbn", bookController.DeleteBookByISBN)
 

@@ -237,6 +237,27 @@ paths:
       summary: Get book by ISBN
       tags:
       - books
+  /books:
+    get:
+      description: Get all books
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Book objects
+          schema:
+            $ref: '#/definitions/model.Book'
+        "404":
+          description: Books not found
+          schema:
+            $ref: '#/definitions/model.Error'
+        "500":
+          description: Internal server error
+          schema:
+            $ref: '#/definitions/model.Error'
+      summary: Get all books
+      tags:
+      - books
 produces:
 - application/json
 schemes:
