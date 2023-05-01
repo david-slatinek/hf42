@@ -1,13 +1,20 @@
 import React from "react";
+
 import "./index.scss";
-import ReactDOM from "react-dom";
+import {createRoot} from "react-dom/client";
+import {BrowserRouter as Router, Route, Routes} from 'react-router-dom';
+import Detail from "./Detail";
 
 const App = () => (
-    <div className="mt-10 text-3xl mx-auto max-w-6xl">
-        <div>Name: detail</div>
-        <div>Framework: react</div>
-        <div>Language: TypeScript</div>
-        <div>CSS: Tailwind</div>
-    </div>
+    <Router>
+        <div>
+            <Routes>
+                <Route path="/:isbn" element={<Detail/>}/>
+            </Routes>
+        </div>
+    </Router>
 );
-ReactDOM.render(<App/>, document.getElementById("app"));
+
+const rootElement = document.getElementById("app")!;
+const root = createRoot(rootElement);
+root.render(<App/>);
