@@ -67,7 +67,7 @@ export default function Display() {
                         <td className="border px-4 py-2">{book.author}</td>
                         <td className="border px-4 py-2">{book.title}</td>
                         <td className="border px-4 py-2">
-                            <a href={"http://localhost:3001/" + book.isbn} target="_blank"
+                            <a href={"http://localhost:3002/" + book.isbn} target="_blank"
                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                                 Details
                             </a>

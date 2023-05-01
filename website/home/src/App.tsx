@@ -1,14 +1,32 @@
 import React from "react";
-import ReactDOM from "react-dom";
+import {createRoot} from "react-dom/client";
 
 import "./index.scss";
 
+// @ts-ignore
+import Display from "display/Display";
+// @ts-ignore
+import Detail from "detail/Detail";
+import {BrowserRouter as Router, Route, Routes} from "react-router-dom";
+
 const App = () => (
-  <div className="mt-10 text-3xl mx-auto max-w-6xl">
-    <div>Name: home</div>
-    <div>Framework: react</div>
-    <div>Language: TypeScript</div>
-    <div>CSS: Tailwind</div>
-  </div>
+    <>
+        <div className="container mx-auto mt-8">
+            <h1 className="text-3xl font-bold mb-8">Home page</h1>
+        </div>
+
+        <Router>
+            <div>
+                <Routes>
+                    <Route path="/" element={<Display/>}/>
+                    <Route path="/:isbn" element={<Detail/>}/>
+                </Routes>
+            </div>
+        </Router>
+
+    </>
 );
-ReactDOM.render(<App />, document.getElementById("app"));
+
+const rootElement = document.getElementById("app")!;
+const root = createRoot(rootElement);
+root.render(<App/>);
