@@ -1,0 +1,17 @@
+version: "3.9"
+
+services:
+  web:
+    build: .
+    ports:
+      - "3001:3001"
+    container_name: detail-web-con
+    hostname: detail-web
+    restart: on-failure
+    networks:
+      - hf42-network
+
+networks:
+  hf42-network:
+    name: hf42-network
+    driver: bridge
