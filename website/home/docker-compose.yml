@@ -1,0 +1,28 @@
+version: "3.9"
+
+services:
+  display:
+    extends:
+      file: ../display/docker-compose.yml
+      service: web
+
+  detail:
+    extends:
+      file: ../detail/docker-compose.yml
+      service: web
+
+  web:
+    depends_on: [ display, detail ]
+    build: .
+    ports:
+      - "3002:3002"
+    container_name: home-web-con
+    hostname: home-web
+    restart: on-failure
+    networks:
+      - hf42-network
+
+networks:
+  hf42-network:
+    name: hf42-network
+    driver: bridge
