@@ -1,10 +1,16 @@
 import React from "react";
-import ReactDOM from "react-dom";
 
 import "./index.scss";
 import Display from "./Display";
+import {createRoot} from "react-dom/client";
 
 const App = () => (
-    <Display/>
+    <div>
+        <Display/>
+    </div>
 );
-ReactDOM.render(<App/>, document.getElementById("app"));
+
+const rootElement = document.getElementById("app")!;
+const root = createRoot(rootElement);
+root.render(<App/>);
+
