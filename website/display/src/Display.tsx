@@ -42,35 +42,41 @@ export default function Display() {
             });
     }, []);
 
-    return (
-        <>
+    if (!books || books.length === 0) {
+        return (
             <div className="container mx-auto mt-8">
-                <h1 className="text-3xl font-bold mb-8">Books</h1>
-                <table className="table-auto w-full">
-                    <thead>
-                    <tr>
-                        <th className="px-4 py-2">Author</th>
-                        <th className="px-4 py-2">Title</th>
-                        <th className="px-4 py-2">Details page</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {books.map((book) => (
-                        <tr key={book.isbn}>
-                            <td className="border px-4 py-2">{book.author}</td>
-                            <td className="border px-4 py-2">{book.title}</td>
-                            <td className="border px-4 py-2">
-                                <a href={book.isbn}
-                                   className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                                    Details
-                                </a>
-                            </td>
-                        </tr>
-                    ))}
-                    </tbody>
-                </table>
+                <h1 className="text-3xl font-bold mb-8 text-red-800">Found no books!</h1>
             </div>
-        </>
+        );
+    }
+
+    return (
+        <div className="container mx-auto mt-8">
+            <h1 className="text-3xl font-bold mb-8">Books</h1>
+            <table className="table-auto w-full">
+                <thead>
+                <tr>
+                    <th className="px-4 py-2">Author</th>
+                    <th className="px-4 py-2">Title</th>
+                    <th className="px-4 py-2">Details page</th>
+                </tr>
+                </thead>
+                <tbody>
+                {books.map((book) => (
+                    <tr key={book.isbn}>
+                        <td className="border px-4 py-2">{book.author}</td>
+                        <td className="border px-4 py-2">{book.title}</td>
+                        <td className="border px-4 py-2">
+                            <a href={"http://localhost:3001/" + book.isbn} target="_blank"
+                               className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                                Details
+                            </a>
+                        </td>
+                    </tr>
+                ))}
+                </tbody>
+            </table>
+        </div>
     );
 }
 
