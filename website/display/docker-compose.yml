@@ -7,7 +7,7 @@ services:
       - "3000:3000"
     container_name: display-web-con
     hostname: display-web
-    restart: on-failure
+    restart: no
     networks:
       - hf42-network
 
