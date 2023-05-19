@@ -1,0 +1,37 @@
+version: "3.9"
+
+services:
+  display:
+    image: davidslatinek/hf42-display:latest
+    ports:
+      - "3000:3000"
+    container_name: display
+    hostname: display
+    restart: on-failure
+    networks:
+      - hf42-network
+
+  detail:
+    image: davidslatinek/hf42-detail:latest
+    ports:
+      - "3001:3001"
+    container_name: detail
+    hostname: detail
+    restart: on-failure
+    networks:
+      - hf42-network
+
+  home:
+    image: davidslatinek/hf42-home:latest
+    ports:
+      - "3002:3002"
+    container_name: home
+    hostname: home
+    restart: on-failure
+    networks:
+      - hf42-network
+
+networks:
+  hf42-network:
+    name: hf42-network
+    driver: bridge

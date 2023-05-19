@@ -11,7 +11,7 @@ services:
       file: ../detail/docker-compose.yml
       service: web
 
-  web:
+  home:
     depends_on: [ display, detail ]
     build: .
     ports:
