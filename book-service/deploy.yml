@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: book-service-deployment
+  labels:
+    app: book-microservice
+
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: book-microservice
+  template:
+    metadata:
+      labels:
+        app: book-microservice
+    spec:
+      containers:
+        - name: book-microservice
+          image: public.ecr.aws/d9h5z3n5/book-service:latest
+          ports:
+            - containerPort: 8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: book-service
+spec:
+  type: NodePort
+  selector:
+    app: book-microservice
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
+      nodePort: 30001
