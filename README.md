@@ -1,5 +1,3 @@
-# About
-
 <div align="center">
     <img alt="Go" src="https://img.shields.io/badge/Go-00ADD8?style=for-the-badge&logo=go&logoColor=white"/>
     <img alt="AWS" src="https://img.shields.io/badge/Amazon_AWS-232F3E?style=for-the-badge&logo=amazonaws&logoColor=white"/>
@@ -49,6 +47,8 @@ AWS [Lambda](email-lambda) is triggered, which sends an email with the invoice t
   <br/>
   <i>An example of an invoice.</i>
 </div>
+
+<br/>
 
 The [gateway](gateway) is a reverse proxy that uses Kong to route requests to the other services. The [website](website)
 is a React application that uses micro frontends to display the books.
