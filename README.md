@@ -17,7 +17,8 @@
 ![Logo](payment-service/logo/logo.png)
 
 Book store project with support for managing books, users, orders, and payments. The [book-service](book-service) is a
-REST API that provides CRUD operations for books and was made with Go alongside MongoDB. The [user-service](user-service)
+REST API that provides CRUD operations for books and was made with Go alongside MongoDB.
+The [user-service](user-service)
 provides CRUD operations for users and was made with Spring Boot and Kotlin.
 
 The [order-service](order-service) provides CRUD operations for orders and was made with Quarkus. After an order is
@@ -47,6 +48,9 @@ AWS [Lambda](email-lambda) is triggered, which sends an email with the invoice t
 </div>
 <br/>
 
+The [gateway](gateway) is a reverse proxy that uses Kong to route requests to the other services. The [website](website)
+is a React application that uses micro frontends to display the books.
+
 <div align="center">
   <img src="images/website-1.png" alt="Home page">
   <br/>
@@ -60,6 +64,3 @@ AWS [Lambda](email-lambda) is triggered, which sends an email with the invoice t
   <i>Book details.</i>
 </div>
 <br/>
-
-The [gateway](gateway) is a reverse proxy that uses Kong to route requests to the other services. The [website](website)
-is a React application that uses micro frontends to display the books.
