@@ -17,13 +17,13 @@
 ![Logo](payment-service/logo/logo.png)
 
 Book store project with support for managing books, users, orders, and payments. The [book-service](book-service) is a
-REST API that provides CRUD operations for books and was made with Go. The [user-service](user-service)
+REST API that provides CRUD operations for books and was made with Go alongside MongoDB. The [user-service](user-service)
 provides CRUD operations for users and was made with Spring Boot and Kotlin.
 
 The [order-service](order-service) provides CRUD operations for orders and was made with Quarkus. After an order is
 created, it is sent to a [RabbitMQ](messaging) queue. The [payment-service](payment-service) reads orders from the queue
 and, if a given user is valid, which is validated by the *user-service*, simulates a payment. It creates a
-payment record in the database, generates a PDF invoice, and uploads it to AWS S3. At this point,
+payment record in the MySQL database, generates a PDF invoice, and uploads it to AWS S3. At this point,
 AWS [Lambda](email-lambda) is triggered, which sends an email with the invoice to the user.
 
 <div align="center">
@@ -31,7 +31,6 @@ AWS [Lambda](email-lambda) is triggered, which sends an email with the invoice t
   <br/>
   <i>Invoicing.</i>
 </div>
-
 <br/>
 
 <div align="center">
@@ -39,7 +38,6 @@ AWS [Lambda](email-lambda) is triggered, which sends an email with the invoice t
   <br/>
   <i>Email with a link to the invoice.</i>
 </div>
-
 <br/>
 
 <div align="center">
@@ -47,10 +45,21 @@ AWS [Lambda](email-lambda) is triggered, which sends an email with the invoice t
   <br/>
   <i>An example of an invoice.</i>
 </div>
+<br/>
 
+<div align="center">
+  <img src="images/website-1.png" alt="Home page">
+  <br/>
+  <i>Home page.</i>
+</div>
+<br/>
+
+<div align="center">
+  <img src="images/website-2.png" alt="Book details">
+  <br/>
+  <i>Book details.</i>
+</div>
 <br/>
 
 The [gateway](gateway) is a reverse proxy that uses Kong to route requests to the other services. The [website](website)
 is a React application that uses micro frontends to display the books.
-
-Payment service uses MySQL for storage, other services use MongoDB.
