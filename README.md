@@ -23,7 +23,7 @@ provides CRUD operations for users and was made with Spring Boot and Kotlin.
 
 The [order-service](order-service) provides CRUD operations for orders and was made with Quarkus. After an order is
 created, it is sent to a [RabbitMQ](messaging) queue. The [payment-service](payment-service) reads orders from the queue
-and, if a given user is valid, which is validated by the *user-service*, simulates a payment. It creates a
+and, if a given book is valid, which is validated by the *book-service*, simulates a payment. It creates a
 payment record in the MySQL database, generates a PDF invoice, and uploads it to AWS S3. At this point,
 AWS [Lambda](email-lambda) is triggered, which sends an email with the invoice to the user.
 
